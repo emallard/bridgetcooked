@@ -66,13 +66,17 @@ export class MoveController {
         speed[0] = this.x - this.cx;
         speed[1] = this.y - this.cy;
 
-        if (Math.abs(speed[0]) < 10)
+        if (Math.abs(speed[0]) < 3)
             speed[0] = 0;
 
-
-        if (Math.abs(speed[1]) < 10)
+        if (Math.abs(speed[1]) < 3)
             speed[1] = 0;
 
+        let length = Math.sqrt(speed[0] * speed[0] + speed[1] * speed[1]);
+        if (length > 0) {
+            speed[0] = speed[0] / length;
+            speed[1] = speed[1] / length;
+        }
     }
 
     private DoResize(svg: SVGElement) {
