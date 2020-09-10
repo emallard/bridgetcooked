@@ -11,7 +11,10 @@ export class Toby {
     isDragging: boolean = false;
     draggable: Draggable = Draggable.None;
 
-    img: HTMLImageElement;
+    imgDown: HTMLImageElement;
+    imgUp: HTMLImageElement;
+    imgLeft: HTMLImageElement;
+    imgRight: HTMLImageElement;
 
     constructor() {
         this.position[0] = 500;
@@ -22,8 +25,43 @@ export class Toby {
     }
 
     async LoadAsync() {
-        this.img = await LoadImage('CharacterCatGirl.png');
+        this.imgDown = await LoadImage('CharacterCatGirlDown.png');
+        this.imgUp = await LoadImage('CharacterCatGirlUp.png');
+        this.imgLeft = await LoadImage('CharacterCatGirlLeft.png');
+        this.imgRight = await LoadImage('CharacterCatGirlRight.png');
         //document.body.appendChild(this.img);
+
+
+
     }
 
+    SetImageFromSpeed() {
+
+        if (this.speed[0] == 0 && this.speed[1] == 0)
+            return;
+
+        this.imgDown.style.display = 'none';
+        this.imgUp.style.display = 'none';
+        this.imgLeft.style.display = 'none';
+        this.imgRight.style.display = 'none';
+
+
+        let img = this.imgDown;
+        if (this.speed[0] > 0 && Math.abs(this.speed[0]) > Math.abs(this.speed[1]))
+            img = this.imgRight;
+
+        if (this.speed[0] < 0 && Math.abs(this.speed[0]) > Math.abs(this.speed[1]))
+            img = this.imgLeft;
+
+        if (this.speed[1] > 0 && Math.abs(this.speed[1]) > Math.abs(this.speed[0]))
+            img = this.imgDown;
+        if (this.speed[1] < 0 && Math.abs(this.speed[1]) > Math.abs(this.speed[0]))
+            img = this.imgUp;
+
+        img.style.display = 'block';
+        img.style.left = (window.innerWidth / 2 - 50) + 'px';
+        img.style.top = (window.innerHeight / 2 - 139) + 'px';
+        img.style.position = 'fixed';
+        img.style.zIndex = '' + (Math.round(this.position[1]) + 40);
+    }
 }

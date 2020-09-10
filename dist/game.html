@@ -23,6 +23,14 @@
 <body>
 
 
+    <button id='btn' style='z-index: 9999999; position: fixed'>Full Screen</button>
+    <script>
+        document.getElementById('btn').addEventListener('click', () => {
+            document.body.requestFullscreen();
+            document.getElementById('btn').style.display = 'none'
+        });
+    </script>
+
 </body>
 
 <script src="bundle.js"></script>

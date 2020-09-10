@@ -8,7 +8,9 @@ export class LevelBuilder {
 
     grass: HTMLImageElement;
     wood: HTMLImageElement;
+    wood2: HTMLImageElement;
     stone: HTMLImageElement;
+    stone2: HTMLImageElement;
     water: HTMLImageElement;
     wall: HTMLImageElement;
 
@@ -18,7 +20,9 @@ export class LevelBuilder {
     async LoadAsync() {
         this.grass = await LoadImage('GrassBlock.png');
         this.wood = await LoadImage('WoodBlock.png');
+        this.wood2 = await LoadImage('WoodBlock2.png');
         this.stone = await LoadImage('StoneBlock.png');
+        this.stone2 = await LoadImage('StoneBlock2.png');
         this.water = await LoadImage('WaterBlock.png');
         this.wall = await LoadImage('WallBlock.png');
 
@@ -52,11 +56,18 @@ export class LevelBuilder {
                 }
                 if (char == 't')
                     img = this.wood;
+                if (char == 'u')
+                    img = this.wood2;
                 if (char == 'w')
                     img = this.wall;
+
                 if (char == '-') {
                     isSprite = true;
                     img = this.stone;
+                }
+                if (char == '+') {
+                    isSprite = true;
+                    img = this.stone2;
                 }
 
                 let x = (indexChar * this.blockWidth);
@@ -99,13 +110,13 @@ export class LevelBuilder {
 0000000000000
 0111111111110
 01wwwwwwwww10
-01w--ttt--w10
+01wt+t+t+tw10
+01w+-+-+-+w10
+01wu-----tw10
+01wu-----+w10
 01wt-----tw10
-01wt-----tw10
-01wt-----tw10
+01w+-----+w10
 01w-------w10
-01w-------w10
-01wwwwwwwww10
 0111111111110
 0000000000000
 `;

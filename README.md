@@ -23,3 +23,6 @@ npm start
 - Faire cuire du riz
 
 - Rassember le riz / La viande / La sauce kiwi
+
+
+- https://www.spriters-resource.com/snes/sbomber/

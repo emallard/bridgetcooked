@@ -2,6 +2,7 @@ import { MoveController } from "./MoveController";
 import { Level } from "./Level";
 import { Toby } from "./Toby";
 import { LevelBuilder } from "./LevelBuilder";
+import { ActionController } from "./ActionController";
 
 
 export class Game {
@@ -18,10 +19,15 @@ export class Game {
 
         this.toby = new Toby();
         await this.toby.LoadAsync();
-        this.level.container.appendChild(this.toby.img);
+        this.level.container.appendChild(this.toby.imgUp);
+        this.level.container.appendChild(this.toby.imgDown);
+        this.level.container.appendChild(this.toby.imgLeft);
+        this.level.container.appendChild(this.toby.imgRight);
 
         this.moveController = new MoveController();
         this.moveController.Load();
+
+        new ActionController().Load();
     }
 
     tmpPosition = new Float32Array(2);
@@ -37,10 +43,7 @@ export class Game {
             this.toby.position[1] = this.tmpPosition[1];
         }
 
-        this.toby.img.style.left = (window.innerWidth / 2 - 50) + 'px';
-        this.toby.img.style.top = (window.innerHeight / 2 - 139) + 'px';
-        this.toby.img.style.position = 'fixed';
-        this.toby.img.style.zIndex = '' + (Math.round(this.toby.position[1]) + 40);
+        this.toby.SetImageFromSpeed();
 
         this.level.container.style.left = (-this.toby.position[0] + (window.innerWidth / 2)) + 'px';
         this.level.container.style.top = (-this.toby.position[1] + (window.innerHeight / 2)) + 'px';
