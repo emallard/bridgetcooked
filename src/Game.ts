@@ -35,6 +35,10 @@ export class Game {
 
         this.moveController.GetSpeed(this.toby.speed);
 
+        let speedLength = Math.sqrt(this.toby.speed[0] * this.toby.speed[0] + this.toby.speed[1] * this.toby.speed[1]);
+        this.toby.direction[0] = this.toby.speed[0] / speedLength;
+        this.toby.direction[1] = this.toby.speed[1] / speedLength;
+
         this.tmpPosition[0] = this.toby.position[0] + this.toby.speed[0];
         this.tmpPosition[1] = this.toby.position[1] + this.toby.speed[1];
 
@@ -52,6 +56,9 @@ export class Game {
         this.moveController.UpdateGraphics();
         //this.tobyPosition[0] += this.tobySpeed[0];
         //this.tobyPosition[1] += this.tobySpeed[1];
+
+
+        this.level.UpdateHighlightBlock(this.toby);
     }
 }
 

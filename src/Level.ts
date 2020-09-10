@@ -2,6 +2,7 @@ import { LoadImage } from "./LoadImage";
 import { disableBodyScroll } from "body-scroll-lock";
 import { Block } from "./Blocks/Block";
 import { Toby } from "./Toby";
+import { Physics } from "./Physics";
 
 export class Level {
 
@@ -29,20 +30,50 @@ export class Level {
         return true;
     }
 
+    UpdateHighlightBlock(toby: Toby) {
+        let targetBlock = this.GetTargetBlock(toby);
+        if (targetBlock != null) {
+            targetBlock.img.style.filter = 'brightness(150%)';
+        }
+    }
+
     ActionButton() {
         // find target block
     }
 
+    tested = new Float32Array(2);
     GetTargetBlock(toby: Toby): Block {
-        for (let block of this.blocks) {
-            let dx = block.position[0] - toby.position[0];
-            let dy = block.position[1] - toby.position[1];
-            //if (Math.abs(dx) < toby.size + 2)
 
-            if (Math.abs(dx) < (toby.size + block.size + 3)
-                && Math.abs(dy) < (toby.size + block.size + 3))
+        this.tested[0] = toby.position[0];
+        this.tested[1] = toby.position[1];
+
+        /*
+        let dir = toby.direction;
+        if (dir[0] > 0 && Math.abs(dir[0]) > Math.abs(dir[1]))
+        {
+            // test right
+            testedX += toby.size;
+        }
+
+        if (this.speed[0] < 0 && Math.abs(this.speed[0]) > Math.abs(this.speed[1]))
+            img = this.imgLeft;
+
+        if (this.speed[1] > 0 && Math.abs(this.speed[1]) > Math.abs(this.speed[0]))
+            img = this.imgDown;
+        if (this.speed[1] < 0 && Math.abs(this.speed[1]) > Math.abs(this.speed[0]))
+            img = this.imgUp;
+        */
+
+
+
+
+
+        for (let block of this.blocks) {
+            //console.log(this.tested, block.position, block.size);
+            if (Physics.IsPointInRect(this.tested, block.position, block.size))
                 return block;
         }
+
         return null;
     }
 

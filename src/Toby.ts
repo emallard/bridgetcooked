@@ -17,8 +17,8 @@ export class Toby {
     imgRight: HTMLImageElement;
 
     constructor() {
-        this.position[0] = 500;
-        this.position[1] = 500;
+        this.position[0] = 0;//500;
+        this.position[1] = 0;//500;
 
         this.speed[0] = 0;
         this.speed[1] = 0;

@@ -86,22 +86,26 @@ export class LevelBuilder {
                 clone.style.zIndex = '' + y;
                 level.container.appendChild(clone);
 
-                /*
+
                 if (!isSprite) {
-                    if (char == 't') {
+                    if (char == 't' || char == 'u') {
                         let table = new Table();
                         table.position[0] = x;
                         table.position[1] = y;
+                        table.size[0] = 50;
+                        table.size[1] = 40;
+                        table.img = clone;
                         level.blocks.push(table);
                     }
+                    /*
                     if (char == 'w') {
                         let wall = new Wall();
                         wall.position[0] = x;
                         wall.position[1] = y;
                         level.blocks.push(wall);
-                    }
+                    }*/
                 }
-                */
+
             }
         });
     }
