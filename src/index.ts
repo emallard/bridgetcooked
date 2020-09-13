@@ -1,6 +1,7 @@
 import { LoadImage } from "./LoadImage";
 import { Game } from "./Game";
 import { disableBodyScroll } from 'body-scroll-lock';
+import { App } from "./App";
 
 function doResize(svg: SVGElement) {
     svg.style.backgroundColor = 'white';
@@ -53,9 +54,16 @@ export async function newApp() {
         cir1.setAttribute("cy", '' + y);
     });
     */
+
+
+    /*
     let game = new Game();
     await game.LoadAsync();
     setInterval(() => game.Update());
+    */
+
+    let app = new App();
+    app.CreateNoDom();
 
 
 }

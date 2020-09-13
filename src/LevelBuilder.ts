@@ -2,6 +2,7 @@ import { Level } from "./Level";
 import { LoadImage } from "./LoadImage";
 import { Block } from "./Blocks/Block";
 import { Table } from "./Blocks/Table";
+import { Supply } from "./Blocks/Supply";
 import { Wall } from "./Blocks/Wall";
 
 export class LevelBuilder {
@@ -13,6 +14,8 @@ export class LevelBuilder {
     stone2: HTMLImageElement;
     water: HTMLImageElement;
     wall: HTMLImageElement;
+    supply: HTMLImageElement;
+    star: HTMLImageElement;
 
     blockWidth = 100;
     blockHeight = 80;
@@ -25,6 +28,8 @@ export class LevelBuilder {
         this.stone2 = await LoadImage('StoneBlock2.png');
         this.water = await LoadImage('WaterBlock.png');
         this.wall = await LoadImage('WallBlock.png');
+        this.supply = await LoadImage('SupplyBlock.png');
+        this.star = await LoadImage('Star.png');
 
     }
     CreateLevel(): Level {
@@ -70,6 +75,10 @@ export class LevelBuilder {
                     img = this.stone2;
                 }
 
+                if (char == 'A') {
+                    img = this.supply;
+                }
+
                 let x = (indexChar * this.blockWidth);
                 let y = (indexLine * this.blockHeight);
 
@@ -79,15 +88,22 @@ export class LevelBuilder {
                     imgY = y - 130;
                 }
 
-                let clone: HTMLImageElement = <HTMLImageElement>img.cloneNode(true);
-                clone.style.position = 'absolute';
-                clone.style.left = imgX + 'px';
-                clone.style.top = imgY + 'px';
-                clone.style.zIndex = '' + y;
-                level.container.appendChild(clone);
+
+                if (isSprite) {
+                    let clone: HTMLImageElement = <HTMLImageElement>img.cloneNode(true);
+                    clone.style.position = 'absolute';
+                    clone.style.left = imgX + 'px';
+                    clone.style.top = imgY + 'px';
+                    clone.style.zIndex = '' + y;
+                    level.container.appendChild(clone);
+                }
 
 
                 if (!isSprite) {
+
+                    /*
+                    let clone: HTMLImageElement = <HTMLImageElement>img.cloneNode(true);
+
                     if (char == 't' || char == 'u') {
                         let table = new Table();
                         table.position[0] = x;
@@ -97,13 +113,17 @@ export class LevelBuilder {
                         table.img = clone;
                         level.blocks.push(table);
                     }
-                    /*
-                    if (char == 'w') {
-                        let wall = new Wall();
-                        wall.position[0] = x;
-                        wall.position[1] = y;
-                        level.blocks.push(wall);
-                    }*/
+
+                    if (char == 'A') {
+                        let table = new Supply();
+                        table.position[0] = x;
+                        table.position[1] = y;
+                        table.size[0] = 50;
+                        table.size[1] = 40;
+                        table.img = clone;
+                        level.blocks.push(table);
+                    }
+                    */
                 }
 
             }
@@ -114,7 +134,7 @@ export class LevelBuilder {
 0000000000000
 0111111111110
 01wwwwwwwww10
-01wt+t+t+tw10
+01wA+t+t+tw10
 01w+-+-+-+w10
 01wu-----tw10
 01wu-----+w10

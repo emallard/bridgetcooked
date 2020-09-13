@@ -1,4 +1,4 @@
-import { Toby } from "../Toby";
+import { Toby } from "./Toby";
 import { Draggable } from "../Draggable";
 import { Block } from "./Block";
 

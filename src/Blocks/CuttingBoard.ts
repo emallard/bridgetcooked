@@ -1,4 +1,4 @@
-import { Toby } from "../Toby";
+import { Toby } from "./Toby";
 import { Draggable } from "../Draggable";
 import { Block } from "./Block";
 
@@ -7,6 +7,7 @@ export class CuttingBoard extends Block {
     draggable: Draggable;
     cuttingProgress: number = 0;
 
+    /*
     Action(toby: Toby) {
         if (!toby.isDragging) {
             this.draggable = toby.draggable;
@@ -25,5 +26,5 @@ export class CuttingBoard extends Block {
                     this.draggable = Draggable.KiwiCut;
             }
         }
-    }
+    }*/
 }

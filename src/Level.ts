@@ -1,7 +1,7 @@
 import { LoadImage } from "./LoadImage";
 import { disableBodyScroll } from "body-scroll-lock";
 import { Block } from "./Blocks/Block";
-import { Toby } from "./Toby";
+import { Toby } from "./Blocks/Toby";
 import { Physics } from "./Physics";
 
 export class Level {
@@ -9,8 +9,8 @@ export class Level {
 
 
     container: HTMLDivElement;
-
     blocks: Block[] = [];
+    highlightedBlock: Block;
 
     constructor() {
         this.container = document.createElement('div');
@@ -31,9 +31,14 @@ export class Level {
     }
 
     UpdateHighlightBlock(toby: Toby) {
+        if (this.highlightedBlock != null)
+            this.highlightedBlock.img.style.filter = '';
+
+
         let targetBlock = this.GetTargetBlock(toby);
         if (targetBlock != null) {
             targetBlock.img.style.filter = 'brightness(150%)';
+            this.highlightedBlock = targetBlock;
         }
     }
 

@@ -12,8 +12,9 @@ export class MoveController {
 
     Load() {
         let svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
-        //svg.style.width = '100%';
-        //svg.style.height = '100%';
+        svg.style.position = 'fixed';
+        svg.style.top = '0px';
+        svg.style.left = '0px';
 
 
 
@@ -40,15 +41,18 @@ export class MoveController {
 
         svg.addEventListener('touchmove', (evt: TouchEvent) => {
 
+            //console.log('touch move');
+
             var touch = evt.touches[0];
 
             var rect = svg.getBoundingClientRect();
             this.x = touch.clientX - rect.left; //x position within the element.
             this.y = touch.clientY - rect.top; //y position within the element.
+            this.UpdateGraphics();
         });
 
         svg.addEventListener('touchend', (evt: TouchEvent) => {
-            console.log('touch stop');
+
             this.x = this.cx;
             this.y = this.cy;
         });

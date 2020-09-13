@@ -1,5 +1,5 @@
-import { LoadImage } from "./LoadImage";
-import { Draggable } from "./Draggable";
+import { LoadImage } from "../LoadImage";
+import { Draggable } from "../Draggable";
 
 export class Toby {
 
@@ -9,12 +9,21 @@ export class Toby {
     size = 50;
 
     isDragging: boolean = false;
-    draggable: Draggable = Draggable.None;
+    draggable: Draggable = null;
+
+
+
+    div: HTMLDivElement;
 
     imgDown: HTMLImageElement;
     imgUp: HTMLImageElement;
     imgLeft: HTMLImageElement;
     imgRight: HTMLImageElement;
+
+
+
+    draggableImg: HTMLElement;
+
 
     constructor() {
         this.position[0] = 0;//500;
@@ -25,6 +34,9 @@ export class Toby {
     }
 
     async LoadAsync() {
+
+
+        this.div = document.createElement('div');
         this.imgDown = await LoadImage('CharacterCatGirlDown.png');
         this.imgUp = await LoadImage('CharacterCatGirlUp.png');
         this.imgLeft = await LoadImage('CharacterCatGirlLeft.png');
@@ -32,10 +44,13 @@ export class Toby {
         //document.body.appendChild(this.img);
 
 
-
+        this.div.appendChild(this.imgUp);
+        this.div.appendChild(this.imgDown);
+        this.div.appendChild(this.imgLeft);
+        this.div.appendChild(this.imgRight);
     }
 
-    SetImageFromSpeed() {
+    UpdateGraphics() {
 
         if (this.speed[0] == 0 && this.speed[1] == 0)
             return;
@@ -59,9 +74,25 @@ export class Toby {
             img = this.imgUp;
 
         img.style.display = 'block';
-        img.style.left = (window.innerWidth / 2 - 50) + 'px';
-        img.style.top = (window.innerHeight / 2 - 139) + 'px';
-        img.style.position = 'fixed';
-        img.style.zIndex = '' + (Math.round(this.position[1]) + 40);
+
+        this.div.style.left = (window.innerWidth / 2 - 50) + 'px';
+        this.div.style.top = (window.innerHeight / 2 - 139) + 'px';
+        this.div.style.position = 'fixed';
+        this.div.style.zIndex = '' + (Math.round(this.position[1]) + 40);
+
+
+
+    }
+
+    Drag(draggable: Draggable) {
+
+        /*
+        this.isDragging = true;
+        this.draggable = draggable;
+        let clone: HTMLImageElement = <HTMLImageElement>this.star.cloneNode(true);
+        clone.style.position = 'absolute';
+        clone.style.top = '-40px';
+        this.div.appendChild(clone);
+        */
     }
 }
