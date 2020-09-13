@@ -22,8 +22,14 @@ describe('MoveSystem', function () {
         toby.y = 2;
         app.db.Insert(toby);
 
+        expect(app.db.Count(TobMoveControl)).equals(1);
+        expect(app.db.Count(TobConstrainedMoveControl)).equals(1);
+
         let tobMoveControl = app.db.First(TobMoveControl);
         let tobConstrainedMoveControl = app.db.First(TobConstrainedMoveControl);
+
+        expect(toby.x).equals(1);
+        expect(toby.y).equals(2);
 
         tobMoveControl.moveX = 3;
         tobMoveControl.moveY = 4;

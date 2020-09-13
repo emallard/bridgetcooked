@@ -4,6 +4,9 @@ import { PlayerMoveControl } from "../Blocks/PlayerMoveControl";
 import { Tob } from "../Blocks/Tob";
 import { TobMoveControl } from "../Blocks/TobMoveControl";
 import { TobConstrainedMoveControl } from "../Blocks/TobConstrainedMoveControl";
+import { Supply } from "../Blocks/Supply";
+import { Wall } from "../Blocks/Wall";
+import { CollisionRect } from "./CollisionRect";
 
 export class MoveSystem implements IUpdatable {
 
@@ -13,7 +16,7 @@ export class MoveSystem implements IUpdatable {
     Configure(app: App) {
         this.app = app;
 
-        this.app.db.OnInserted(Tob, (tob) => {
+        app.db.OnInserted(Tob, (tob) => {
             let tobConstrainedMove = new TobConstrainedMoveControl();
             tobConstrainedMove.constrainedMoveX = 0;
             tobConstrainedMove.constrainedMoveY = 0;
@@ -35,8 +38,8 @@ export class MoveSystem implements IUpdatable {
         });
 
 
-        this.app.db.OnUpdated(PlayerMoveControl, (moveControl) => {
-            let tobMoveControl = this.app.db.First(TobMoveControl);
+        app.db.OnUpdated(PlayerMoveControl, (moveControl) => {
+            let tobMoveControl = app.db.First(TobMoveControl);
 
             if (!moveControl.isDown) {
                 tobMoveControl.moveX = 0;
@@ -53,25 +56,53 @@ export class MoveSystem implements IUpdatable {
             }
         });
 
-        this.app.db.OnUpdated(TobMoveControl, (tobMoveControl) => {
-            let constrained = this.app.db.First(TobConstrainedMoveControl);
+        app.db.OnUpdated(TobConstrainedMoveControl, (tobConstrainedMoveControl) => {
+            //console.log('TobConstrainedMoveControl updated', tobConstrainedMoveControl.constrainedMoveX);
+            let tob = app.db.First(Tob);
+            tob.x += tobConstrainedMoveControl.constrainedMoveX;
+            tob.y += tobConstrainedMoveControl.constrainedMoveY;
+            app.db.Update(tob);
+        });
 
-            // collide with all the boxes
+        this.ConfigureConstrainedMove(app);
+    }
 
+
+    ConfigureConstrainedMove(app: App) {
+
+        let blockWidth = 101;
+        let blockHeight = 80;
+        function InsertCollisionRect(id: string, x: number, y: number) {
+            let collisionRect = new CollisionRect();
+            collisionRect.userId = id;
+            collisionRect.x = x;
+            collisionRect.y = y;
+            collisionRect.width = blockWidth;
+            collisionRect.height = blockHeight;
+            app.db.Insert(collisionRect);
+        }
+
+        app.db.OnInserted(Supply, (supply) => {
+            InsertCollisionRect(supply.id, supply.x, supply.y);
+        });
+
+        app.db.OnInserted(Wall, (wall) => {
+            InsertCollisionRect(wall.id, wall.x, wall.y);
+        });
+
+        app.db.OnUpdated(TobMoveControl, (tobMoveControl) => {
+            let constrained = app.db.First(TobConstrainedMoveControl);
+
+            let rects = app.db.GetAll(CollisionRect);
+
+            // collision between rects
 
             constrained.constrainedMoveX = tobMoveControl.moveX;
             constrained.constrainedMoveY = tobMoveControl.moveY;
-            this.app.db.Update(constrained);
+            app.db.Update(constrained);
         });
 
-        this.app.db.OnUpdated(TobConstrainedMoveControl, (tobConstrainedMoveControl) => {
-            let tob = this.app.db.First(Tob);
-            tob.x += tobConstrainedMoveControl.constrainedMoveX;
-            tob.y += tobConstrainedMoveControl.constrainedMoveY;
-            this.app.db.Update(tob);
-        });
     }
-
 
 
     Update(dt: number) {

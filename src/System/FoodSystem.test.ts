@@ -1,13 +1,7 @@
 
 import { App } from "../App";
-import { GraphicsSystem } from "./GraphicsSystem";
-import { Floor } from "../Blocks/Floor";
-import { GraphicsSprite } from "../Blocks/GraphicsSprite";
 import { expect } from "chai";
 import { Tob } from "../Blocks/Tob";
-import { TobMoveControl } from "../Blocks/TobMoveControl";
-import { MoveSystem } from "./MoveSystem";
-import { PlayerMoveControl } from "../Blocks/PlayerMoveControl";
 import { FoodSystem } from "./FoodSystem";
 import { TobActionSupply } from "../Blocks/TobActionSupply";
 import { Supply } from "../Blocks/Supply";

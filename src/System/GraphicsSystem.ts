@@ -4,7 +4,6 @@ import { Floor } from "../Blocks/Floor";
 import { IUpdatable } from "../IUpdatable";
 import { Tob } from "../Blocks/Tob";
 
-
 export class GraphicsSystem implements IUpdatable {
     app: App;
 

@@ -2,6 +2,11 @@ import { LoadImage } from "./LoadImage";
 import { Game } from "./Game";
 import { disableBodyScroll } from 'body-scroll-lock';
 import { App } from "./App";
+import { MoveSystem } from "./System/MoveSystem";
+import { Tob } from "./Blocks/Tob";
+import { Floor } from "./Blocks/Floor";
+import { Supply } from "./Blocks/Supply";
+import { GraphicsSystem } from "./System/GraphicsSystem";
 
 function doResize(svg: SVGElement) {
     svg.style.backgroundColor = 'white';
@@ -64,6 +69,29 @@ export async function newApp() {
 
     let app = new App();
     app.CreateNoDom();
+
+    new MoveSystem().Configure(app);
+    new GraphicsSystem().Configure(app);
+
+    let toby = new Tob();
+    toby.x = 500;
+    toby.y = 400;
+    app.db.Insert(toby);
+
+
+
+    for (let x = 0; x < 10; ++x) {
+        let floor = new Floor();
+        floor.url = 'StoneBlock.png';
+        floor.x = x * 100;
+        floor.y = 0;
+        app.db.Insert(floor);
+    }
+
+    let supply = new Supply();
+    supply.x = 0;
+    supply.y = 200;
+    app.db.Insert(supply);
 
 
 }

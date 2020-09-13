@@ -1,10 +1,10 @@
 import { Toby } from "./Toby";
 import { Block } from "./Block";
+import { DbEntity } from "../Db/DbEntity";
 
-export class Wall extends Block {
-
-    Action(toby: Toby) {
-    }
+export class Wall extends DbEntity {
+    x: number;
+    y: number;
 }
 
 
