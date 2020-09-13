@@ -29,8 +29,16 @@ export class GraphicsFoodAttachmentSystem implements IUpdatable {
     Update(dt: number) {
 
         for (let attachment of this.app.db.GetAll(FoodAttachment)) {
+
+            console.log(attachment.id);
             let idFood = attachment.idFood;
             let foodSprite = this.app.db.First(GraphicsSprite, x => x.userId == idFood);
+            let attachedSprite = this.app.db.First(GraphicsSprite, x => x.userId == attachment.idAttached);
+
+            foodSprite.x = attachedSprite.x;
+            foodSprite.y = attachedSprite.y;
+
+            this.app.db.Update(foodSprite);
         }
     }
 

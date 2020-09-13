@@ -4,7 +4,8 @@ import { GraphicsSystem } from "./GraphicsSystem";
 import { Floor } from "../Blocks/Floor";
 import { GraphicsSprite } from "../Blocks/GraphicsSprite";
 import { expect } from "chai";
-import { Tob, TobMoveControl } from "../Blocks/Tob";
+import { Tob } from "../Blocks/Tob";
+import { TobMoveControl } from "../Blocks/TobMoveControl";
 import { MoveSystem } from "./MoveSystem";
 import { PlayerMoveControl } from "../Blocks/PlayerMoveControl";
 import { FoodSystem } from "./FoodSystem";
@@ -12,6 +13,7 @@ import { TobActionSupply } from "../Blocks/TobActionSupply";
 import { Supply } from "../Blocks/Supply";
 import { Food } from "../Blocks/Food";
 import { FoodAttachment } from "../Blocks/FoodAttachment";
+import { PlayerActionControl } from "../Blocks/PlayerActionControl";
 
 
 describe('FoodSystem', function () {
@@ -47,9 +49,42 @@ describe('FoodSystem', function () {
     });
 
 
-    /*
+
     it('PlayerActionControl creates a TobActionSupply if close', function () {
+        let app = new App().CreateNoDom();
+        new FoodSystem().Configure(app);
+
+        let toby = new Tob();
+        toby.x = 1;
+        toby.y = 2;
+        app.db.Insert(toby);
+
+
+        let supply = new Supply();
+        supply.x = 100;
+        supply.y = 200;
+        app.db.Insert(supply);
+
+        expect(app.db.Count(Food)).equal(0);
+        expect(app.db.Count(PlayerActionControl)).equal(1);
+        expect(app.db.Count(TobActionSupply)).equal(1);
+
+        let tobActionSupply = app.db.First(TobActionSupply);
+        let playerAction = app.db.First(PlayerActionControl);
+
+
+        supply.x = 100;
+        supply.y = 200;
+        app.db.Update(supply);
+        app.db.Update(playerAction);
+        expect(tobActionSupply.idSupply).equals(undefined);
+
+        supply.x = 1;
+        supply.y = 2;
+        app.db.Update(supply);
+        app.db.Update(playerAction);
+        expect(tobActionSupply.idSupply).equal(supply.id);
 
     });
-    */
+
 });

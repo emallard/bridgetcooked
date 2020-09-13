@@ -34,6 +34,13 @@ export class GraphicsSystem implements IUpdatable {
             graphicsSprite.height = GraphicsSystem.SpriteHeight();
             app.db.Insert(graphicsSprite);
         });
+
+        app.db.OnUpdated(Tob, (toby: Tob) => {
+            let graphicsSprite = this.app.db.First(GraphicsSprite, x => x.userId == toby.id);
+            graphicsSprite.x = toby.x;
+            graphicsSprite.y = toby.y;
+            app.db.Update(graphicsSprite);
+        });
     }
 
     Update(dt: number) {

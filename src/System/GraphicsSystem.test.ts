@@ -33,10 +33,19 @@ describe('GraphicsSystem', function () {
         toby.y = 2;
         app.db.Insert(toby);
 
-        let s = app.db.First(GraphicsSprite);
+        let s = app.db.First(GraphicsSprite, x => x.userId == toby.id);
         expect(s.x).equal(1);
         expect(s.y).equal(2);
         expect(s.width).equal(GraphicsSystem.SpriteWidth());
         expect(s.height).equal(GraphicsSystem.SpriteHeight());
+
+
+        toby.x = 5;
+        toby.y = 6;
+        app.db.Update(toby);
+
+
+        expect(s.x).equal(5);
+        expect(s.y).equal(6);
     });
 });

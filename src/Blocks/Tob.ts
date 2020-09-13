@@ -9,22 +9,4 @@ export class Tob extends DbEntity {
 }
 
 
-export class TobMoveControl extends DbEntity {
-    moveX: number;
-    moveY: number;
-}
 
-export class TobPosition {
-    x: number;
-    y: number;
-}
-
-export class CollideBox {
-    x: number;
-    y: number;
-}
-
-export class AttachedFood {
-    x: number;
-    y: number;
-}
