@@ -1,8 +1,3 @@
-import { Toby } from "./Blocks/Toby";
-
-import * as THREE from "three";
-import { Graphics } from "./Graphics";
-import { MoveController } from "./MoveController";
 import { Db } from "./Db/Db";
 import { Tob } from "./Blocks/Tob";
 import { Table } from "./Blocks/Table";
@@ -12,8 +7,6 @@ import { IUpdatable } from "./IUpdatable";
 export class App {
 
     updatables: IUpdatable[] = [];
-    graphics: Graphics;
-    moveController = new MoveController();
     db: Db;
     CreateNoDom(): App {
         this.db = new Db();
@@ -22,9 +15,6 @@ export class App {
 
     CreateDom(): App {
         this.CreateNoDom();
-        this.graphics = new Graphics();
-        this.graphics.Create();
-        this.moveController.Load();
         return this;
     }
 

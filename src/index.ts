@@ -1,5 +1,3 @@
-import { LoadImage } from "./LoadImage";
-import { Game } from "./Game";
 import { disableBodyScroll } from 'body-scroll-lock';
 import { App } from "./App";
 import { MoveSystem } from "./System/MoveSystem";
@@ -17,7 +15,6 @@ import { GraphicsFoodAttachmentSystem } from "./System/GraphicsFoodAttachmentSys
 import { Table } from "./Blocks/Table";
 import { PlayerActionSystem } from "./System/PlayerActionSystem";
 import { TableSystem } from "./System/TableSystem";
-import { Graphics } from "./Graphics";
 import { SvgRootSystem } from "./System/SvgRootSystem";
 import { Root } from "./Blocks/Root";
 
@@ -39,46 +36,6 @@ export async function newApp() {
 
     console.log('happy birthday bridget');
 
-
-    /*
-    let img1 = await LoadImage('kiwi.png');
-    
-
-    let svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
-    //svg.style.width = '100%';
-    //svg.style.height = '100%';
-    document.body.appendChild(svg);
-    doResize(svg);
-
-    const cir1 = document.createElementNS("http://www.w3.org/2000/svg", "circle");
-    cir1.setAttribute("cx", "80");
-    cir1.setAttribute("cy", "80");
-    cir1.setAttribute("r", "30");
-    cir1.setAttribute("fill", "red");
-
-    // attach it to the container
-    svg.appendChild(cir1);
-
-    svg.addEventListener('touchmove', (evt: TouchEvent) => {
-
-        var touch = evt.touches[0];
-
-        var rect = svg.getBoundingClientRect();
-        var x = touch.clientX - rect.left; //x position within the element.
-        var y = touch.clientY - rect.top; //y position within the element.
-
-
-        cir1.setAttribute("cx", '' + x);
-        cir1.setAttribute("cy", '' + y);
-    });
-    */
-
-
-    /*
-    let game = new Game();
-    await game.LoadAsync();
-    setInterval(() => game.Update());
-    */
 
     let app = new App();
     app.CreateNoDom();

@@ -1,15 +1,5 @@
-import { Toby } from "./Toby";
-import { Draggable } from "../Draggable";
-import { Block } from "./Block";
+import { DbEntity } from "../Db/DbEntity";
 
-export class Pan extends Block {
+export class Pan extends DbEntity {
 
-    draggable: Draggable;
-
-    Action(toby: Toby) {
-        if (toby.isDragging) {
-            this.draggable = toby.draggable;
-            //toby.draggable = Draggable.None;
-        }
-    }
 }
