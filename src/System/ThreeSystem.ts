@@ -131,7 +131,7 @@ export class ThreeSystem implements IUpdatable {
         var renderer = new THREE.WebGLRenderer();
         renderer.setSize(window.innerWidth, window.innerHeight);
 
-        document.body.appendChild(renderer.domElement);
+        document.getElementById('canvas_container').appendChild(renderer.domElement);
         renderer.domElement.style.position = 'fixed';
         renderer.domElement.style.top = '0px';
         renderer.domElement.style.left = '0px';

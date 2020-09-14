@@ -39,8 +39,8 @@ describe('MoveSystem', function () {
         expect(tobConstrainedMoveControl.constrainedMoveX).equals(3);
         expect(tobConstrainedMoveControl.constrainedMoveY).equals(4);
 
-        expect(toby.x).equals(4);
-        expect(toby.y).equals(6);
+        expect(toby.x).equals(1 + 3 * 200);
+        expect(toby.y).equals(2 + 4 * 200);
     });
 
     it('PlayerMoveControl to TobMove X', function () {

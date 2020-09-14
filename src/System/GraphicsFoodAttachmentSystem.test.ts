@@ -6,7 +6,7 @@ import { GraphicsSprite } from "../Blocks/GraphicsSprite";
 import { expect } from "chai";
 import { Tob } from "../Blocks/Tob";
 import { GraphicsFoodAttachmentSystem } from "./GraphicsFoodAttachmentSystem";
-import { FoodSystem } from "./FoodSystem";
+import { SupplySystem } from "./SupplySystem";
 import { Toby } from "../Blocks/Toby";
 import { Supply } from "../Blocks/Supply";
 import { TobActionSupply } from "../Blocks/TobActionSupply";
@@ -20,7 +20,7 @@ describe('GraphicsFoodAttachmentSystem', function () {
         let app = new App().CreateNoDom();
         new GraphicsSystem().Configure(app);
         new GraphicsFoodAttachmentSystem().Configure(app);
-        new FoodSystem().Configure(app);
+        new SupplySystem().Configure(app);
 
 
         let toby = new Tob();

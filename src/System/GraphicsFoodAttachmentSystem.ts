@@ -17,20 +17,22 @@ export class GraphicsFoodAttachmentSystem implements IUpdatable {
 
 
         app.db.OnInserted(Food, (food: Food) => {
+
             let graphicsSprite = new GraphicsSprite();
             graphicsSprite.userId = food.id;
-            graphicsSprite.url = 'Star.png';
+            graphicsSprite.z = 3;
+            graphicsSprite.url = 'Food.png';
             graphicsSprite.width = GraphicsSystem.SpriteWidth();
             graphicsSprite.height = GraphicsSystem.SpriteHeight();
             app.db.Insert(graphicsSprite);
         });
+
     }
 
     Update(dt: number) {
 
         for (let attachment of this.app.db.GetAll(FoodAttachment)) {
 
-            console.log(attachment.id);
             let idFood = attachment.idFood;
             let foodSprite = this.app.db.First(GraphicsSprite, x => x.userId == idFood);
             let attachedSprite = this.app.db.First(GraphicsSprite, x => x.userId == attachment.idAttached);

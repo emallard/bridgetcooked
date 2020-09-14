@@ -1,13 +1,15 @@
 import { IUpdatable } from "../IUpdatable";
 import { App } from "../App";
-import { TobActionSupply } from "../Blocks/TobActionSupply";
+import { TobActionSupply, TobActionTable } from "../Blocks/TobActionSupply";
 import { Tob } from "../Blocks/Tob";
 import { Food } from "../Blocks/Food";
 import { FoodAttachment } from "../Blocks/FoodAttachment";
-import { PlayerActionControl } from "../Blocks/PlayerActionControl";
+import { PlayerAction } from "../Blocks/PlayerAction";
 import { Supply } from "../Blocks/Supply";
+import { Table } from "../Blocks/Table";
 
-export class FoodSystem implements IUpdatable {
+
+export class SupplySystem implements IUpdatable {
 
     app: App;
 
@@ -19,9 +21,6 @@ export class FoodSystem implements IUpdatable {
         this.app.db.OnInserted(Tob, (tob) => {
             let tobActionSupply = new TobActionSupply();
             app.db.Insert(tobActionSupply);
-
-            let playerActionControl = new PlayerActionControl();
-            app.db.Insert(playerActionControl);
         });
 
         this.app.db.OnUpdated(TobActionSupply, action => {
@@ -40,20 +39,24 @@ export class FoodSystem implements IUpdatable {
             this.app.db.Insert(foodAttachment);
         });
 
-        this.app.db.OnUpdated(PlayerActionControl, action => {
+
+        this.app.db.OnUpdated(PlayerAction, action => {
 
             let supplies = app.db.GetAll(Supply);
             let toby = app.db.First(Tob);
             let tobActionSupply = app.db.First(TobActionSupply);
 
             for (let supply of supplies) {
-                if (Math.abs(supply.x - toby.x) + Math.abs(supply.y - toby.y) < 5) {
+                if (Math.abs(supply.x - toby.x) + Math.abs(supply.y - toby.y) < 100) {
+
+                    console.log('supply action !');
                     tobActionSupply.idSupply = supply.id;
                     this.app.db.Update(tobActionSupply);
                     return;
                 }
             }
-        })
+        });
+
     }
 
 

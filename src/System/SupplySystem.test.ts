@@ -2,18 +2,19 @@
 import { App } from "../App";
 import { expect } from "chai";
 import { Tob } from "../Blocks/Tob";
-import { FoodSystem } from "./FoodSystem";
+import { SupplySystem } from "./SupplySystem";
 import { TobActionSupply } from "../Blocks/TobActionSupply";
 import { Supply } from "../Blocks/Supply";
 import { Food } from "../Blocks/Food";
 import { FoodAttachment } from "../Blocks/FoodAttachment";
-import { PlayerActionControl } from "../Blocks/PlayerActionControl";
+import { PlayerAction } from "../Blocks/PlayerAction";
+import { PlayerActionSystem } from "./PlayerActionSystem";
 
 
-describe('FoodSystem', function () {
+describe('SupplySystem', function () {
     it('TobActionSupply creates Food', function () {
         let app = new App().CreateNoDom();
-        new FoodSystem().Configure(app);
+        new SupplySystem().Configure(app);
 
         let toby = new Tob();
         toby.x = 1;
@@ -44,9 +45,10 @@ describe('FoodSystem', function () {
 
 
 
-    it('PlayerActionControl creates a TobActionSupply if close', function () {
+    it('PlayerAction creates a TobActionSupply if close', function () {
         let app = new App().CreateNoDom();
-        new FoodSystem().Configure(app);
+        new PlayerActionSystem().Configure(app);
+        new SupplySystem().Configure(app);
 
         let toby = new Tob();
         toby.x = 1;
@@ -60,15 +62,15 @@ describe('FoodSystem', function () {
         app.db.Insert(supply);
 
         expect(app.db.Count(Food)).equal(0);
-        expect(app.db.Count(PlayerActionControl)).equal(1);
+        expect(app.db.Count(PlayerAction)).equal(1);
         expect(app.db.Count(TobActionSupply)).equal(1);
 
         let tobActionSupply = app.db.First(TobActionSupply);
-        let playerAction = app.db.First(PlayerActionControl);
+        let playerAction = app.db.First(PlayerAction);
 
 
-        supply.x = 100;
-        supply.y = 200;
+        supply.x = 1000;
+        supply.y = 2000;
         app.db.Update(supply);
         app.db.Update(playerAction);
         expect(tobActionSupply.idSupply).equals(undefined);

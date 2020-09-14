@@ -100,7 +100,7 @@ export class SvgPlayerMoveControlSystem implements IUpdatable {
             this.app.db.Update(svgControl);
         });
 
-        document.body.appendChild(svg);
+        document.getElementById('movecontrol_container').appendChild(svg);
         this.DoResize(svg);
 
         return svgControl;

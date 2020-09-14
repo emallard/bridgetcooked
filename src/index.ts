@@ -11,6 +11,12 @@ import { SvgPlayerMoveControlSystem } from "./System/SvgPlayerMoveControlSystem"
 import { ThreeSystem } from "./System/ThreeSystem";
 import { ThreeGraphicsSpriteSystem } from "./System/ThreeGraphicsSpriteSystem";
 import * as THREE from "three";
+import { SvgPlayerActionControlSystem } from "./System/SvgPlayerActionControlSystem";
+import { SupplySystem } from "./System/SupplySystem";
+import { GraphicsFoodAttachmentSystem } from "./System/GraphicsFoodAttachmentSystem";
+import { Table } from "./Blocks/Table";
+import { PlayerActionSystem } from "./System/PlayerActionSystem";
+import { TableSystem } from "./System/TableSystem";
 
 function doResize(svg: SVGElement) {
     svg.style.backgroundColor = 'white';
@@ -78,7 +84,12 @@ export async function newApp() {
 
     new GraphicsSystem().Configure(app);
     new MoveSystem().Configure(app);
+    new PlayerActionSystem().Configure(app);
+    new SupplySystem().Configure(app);
+    new TableSystem().Configure(app);
+    new GraphicsFoodAttachmentSystem().Configure(app);
     new SvgPlayerMoveControlSystem().Configure(app);
+    new SvgPlayerActionControlSystem().Configure(app);
     new ThreeSystem().Configure(app);
     new ThreeGraphicsSpriteSystem().Configure(app);
 
@@ -102,6 +113,11 @@ export async function newApp() {
         supply.x = 0;
         supply.y = 200;
         app.db.Insert(supply);
+
+        let table = new Table();
+        table.x = 200;
+        table.y = 200;
+        app.db.Insert(table);
     }
 
     Test1();
