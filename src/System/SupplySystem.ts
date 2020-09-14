@@ -47,7 +47,7 @@ export class SupplySystem implements IUpdatable {
             let tobActionSupply = app.db.First(TobActionSupply);
 
             for (let supply of supplies) {
-                if (Math.abs(supply.x - toby.x) + Math.abs(supply.y - toby.y) < 100) {
+                if (Math.abs(supply.x - toby.x) < 50 && Math.abs(supply.y - toby.y) < 50) {
 
                     console.log('supply action !');
                     tobActionSupply.idSupply = supply.id;

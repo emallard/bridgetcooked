@@ -123,8 +123,8 @@ export async function newApp() {
         table.y = 2 * GraphicsSystem.SpriteHeight();
         app.db.Insert(table);
 
-        for (let ix = 0; ix < 10; ++ix) {
-            for (let iy = 0; iy < 10; ++iy) {
+        for (let ix = -10; ix < 10; ++ix) {
+            for (let iy = -10; iy < 10; ++iy) {
                 let x = ix * GraphicsSystem.SpriteWidth();;
                 let y = iy * GraphicsSystem.SpriteHeight();
 

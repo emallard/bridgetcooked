@@ -15,19 +15,33 @@ export class ThreeScene extends DbEntity {
 }
 
 export class ThreeCamera extends DbEntity {
-    camera: THREE.Camera;
+    camera: THREE.OrthographicCamera;
 }
 
 export class ThreeSystem implements IUpdatable {
+
     app: App;
 
     Configure(app: App) {
         this.app = app;
         app.AddUpdatable(this);
 
-        this.ConfigureRenderer(app);
+        let renderer = this.ConfigureRenderer(app).renderer;
         this.ConfigureScene(app);
-        this.ConfigureCamera(app);
+        let camera = this.ConfigureCamera(app).camera;
+
+
+        window.addEventListener('resize', function () {
+            let viewSize = window.innerHeight;
+            var aspect = window.innerWidth / window.innerHeight;
+
+            camera.left = -aspect * viewSize / 2;
+            camera.right = aspect * viewSize / 2;
+            camera.top = viewSize / 2;
+            camera.bottom = -viewSize / 2;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+        });
     }
 
 
@@ -46,7 +60,7 @@ export class ThreeSystem implements IUpdatable {
     }
 
 
-    ConfigureCamera(app: App) {
+    ConfigureCamera(app: App): ThreeCamera {
         let viewSize = window.innerHeight;
         var aspect = window.innerWidth / window.innerHeight;
 
@@ -71,6 +85,7 @@ export class ThreeSystem implements IUpdatable {
             //camera.updateMatrix();
         });
 
+        return threeCamera;
     }
 
 
@@ -126,7 +141,7 @@ export class ThreeSystem implements IUpdatable {
         app.db.Insert(threeScene);
     }
 
-    ConfigureRenderer(app: App) {
+    ConfigureRenderer(app: App): ThreeRenderer {
 
         var renderer = new THREE.WebGLRenderer();
         renderer.setSize(window.innerWidth, window.innerHeight);
@@ -140,6 +155,7 @@ export class ThreeSystem implements IUpdatable {
         threeRenderer.renderer = renderer;
 
         app.db.Insert(threeRenderer);
+        return threeRenderer;
     }
 
 }

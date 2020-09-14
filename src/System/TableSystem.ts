@@ -53,7 +53,7 @@ export class TableSystem implements IUpdatable {
             let tobActionTable = app.db.First(TobActionTable);
 
             for (let table of tables) {
-                if (Math.abs(table.x - toby.x) + Math.abs(table.y - toby.y) < 100) {
+                if (Math.abs(table.x - toby.x) < 50 && Math.abs(table.y - toby.y) < 50) {
 
                     console.log('table action !');
                     tobActionTable.idTable = table.id;
