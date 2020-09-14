@@ -9,12 +9,14 @@ import { Food } from "../Blocks/Food";
 import { FoodAttachment } from "../Blocks/FoodAttachment";
 import { PlayerAction } from "../Blocks/PlayerAction";
 import { PlayerActionSystem } from "./PlayerActionSystem";
+import { Root } from "../Blocks/Root";
 
 
 describe('SupplySystem', function () {
     it('TobActionSupply creates Food', function () {
         let app = new App().CreateNoDom();
         new SupplySystem().Configure(app);
+        app.db.Insert(new Root());
 
         let toby = new Tob();
         toby.x = 1;
@@ -49,6 +51,7 @@ describe('SupplySystem', function () {
         let app = new App().CreateNoDom();
         new PlayerActionSystem().Configure(app);
         new SupplySystem().Configure(app);
+        app.db.Insert(new Root());
 
         let toby = new Tob();
         toby.x = 1;

@@ -9,6 +9,7 @@ import { TobMoveControl } from "../Blocks/TobMoveControl";
 import { MoveSystem } from "./MoveSystem";
 import { PlayerMoveControl } from "../Blocks/PlayerMoveControl";
 import { TobConstrainedMove } from "../Blocks/TobConstrainedMove";
+import { Root } from "../Blocks/Root";
 
 
 describe('MoveSystem', function () {
@@ -16,6 +17,7 @@ describe('MoveSystem', function () {
     it('TobMove to TobPosition', function () {
         let app = new App().CreateNoDom();
         new MoveSystem().Configure(app);
+        app.db.Insert(new Root());
 
         let toby = new Tob();
         toby.x = 1;
@@ -46,6 +48,7 @@ describe('MoveSystem', function () {
     it('PlayerMoveControl to TobMove X', function () {
         let app = new App().CreateNoDom();
         new MoveSystem().Configure(app);
+        app.db.Insert(new Root());
 
         let toby = new Tob();
         toby.x = 1;
@@ -71,6 +74,7 @@ describe('MoveSystem', function () {
     it('PlayerMoveControl to TobMove Y', function () {
         let app = new App().CreateNoDom();
         new MoveSystem().Configure(app);
+        app.db.Insert(new Root());
 
         let toby = new Tob();
         toby.x = 1;

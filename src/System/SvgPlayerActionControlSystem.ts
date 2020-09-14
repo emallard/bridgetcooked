@@ -1,6 +1,18 @@
 import { IUpdatable } from "../IUpdatable";
 import { App } from "../App";
 import { PlayerAction } from "../Blocks/PlayerAction";
+import { DbEntity } from "../Db/DbEntity";
+import { SvgRoot } from "./SvgRootSystem";
+
+export class SvgPlayerActionControl extends DbEntity {
+    cx: number;
+    cy: number;
+    r = 50;
+
+    svg: SVGSVGElement;
+    circle: SVGCircleElement;
+    isDown: boolean;
+}
 
 
 export class SvgPlayerActionControlSystem implements IUpdatable {
@@ -11,24 +23,49 @@ export class SvgPlayerActionControlSystem implements IUpdatable {
     Configure(app: App) {
         this.app = app;
 
-
-        let button = document.createElement('button');
-        //this.button.innerHTML = '<svg><circle cx="50" cy="50" r="50" /></svg> '
-        button.style.position = 'fixed';
-        button.style.backgroundColor = 'green';
-        button.style.right = '100' + "px";
-        button.style.top = '150' + "px";
-
-        button.style.height = '100' + "px";
-        button.style.width = '100' + "px";
-
-        button.addEventListener('click', () => {
-            let actionControl = app.db.First(PlayerAction);
-            app.db.Update(actionControl);
+        app.db.OnInserted(PlayerAction, c => {
+            let svgRoot = app.db.First(SvgRoot);
+            app.db.Insert(this.CreateSvg(svgRoot));
         });
 
-        document.getElementById('actioncontrol_container').appendChild(button);
+        app.db.OnUpdated(SvgPlayerActionControl, c => {
+            let playerAction = app.db.First(PlayerAction);
+            app.db.Update(playerAction);
+        })
     }
+
+    CreateSvg(svgRoot: SvgRoot): SvgPlayerActionControl {
+
+        console.log('coucou');
+        let svg = svgRoot.svg;
+
+        let svgControl = new SvgPlayerActionControl();
+        svgControl.cx = window.innerWidth - 100;
+        svgControl.cy = 200;
+
+        const circle = document.createElementNS("http://www.w3.org/2000/svg", "circle");
+        circle.setAttribute("cx", '' + svgControl.cx);
+        circle.setAttribute("cy", '' + svgControl.cy);
+        circle.setAttribute("r", '' + svgControl.r);
+        circle.setAttribute("stroke", "blue");
+        circle.setAttribute("fill", "transparent");
+
+        // attach it to the container
+        svg.appendChild(circle);
+        svgControl.circle = circle;
+
+        circle.addEventListener('touchstart', (evt: TouchEvent) => {
+            svgControl.circle.setAttribute("fill", 'blue');
+            this.app.db.Update(svgControl);
+        });
+
+        circle.addEventListener('touchend', (evt: TouchEvent) => {
+            svgControl.circle.setAttribute("fill", "transparent");
+        });
+
+        return svgControl;
+    }
+
 
     Update(dt: number) {
     }

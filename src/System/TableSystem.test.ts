@@ -11,12 +11,14 @@ import { PlayerAction } from "../Blocks/PlayerAction";
 import { PlayerActionSystem } from "./PlayerActionSystem";
 import { TableSystem } from "./TableSystem";
 import { Table } from "../Blocks/Table";
+import { Root } from "../Blocks/Root";
 
 
 describe('TableSystem', function () {
     it('TobActionTable moves FoodAttachment', function () {
         let app = new App().CreateNoDom();
         new TableSystem().Configure(app);
+        app.db.Insert(new Root());
 
         let toby = new Tob();
         app.db.Insert(toby);
@@ -54,6 +56,7 @@ describe('TableSystem', function () {
         let app = new App().CreateNoDom();
         new PlayerActionSystem().Configure(app);
         new TableSystem().Configure(app);
+        app.db.Insert(new Root());
 
         let toby = new Tob();
         toby.x = 1;

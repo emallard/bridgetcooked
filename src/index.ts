@@ -18,6 +18,8 @@ import { Table } from "./Blocks/Table";
 import { PlayerActionSystem } from "./System/PlayerActionSystem";
 import { TableSystem } from "./System/TableSystem";
 import { Graphics } from "./Graphics";
+import { SvgRootSystem } from "./System/SvgRootSystem";
+import { Root } from "./Blocks/Root";
 
 function doResize(svg: SVGElement) {
     svg.style.backgroundColor = 'white';
@@ -89,11 +91,13 @@ export async function newApp() {
     new SupplySystem().Configure(app);
     new TableSystem().Configure(app);
     new GraphicsFoodAttachmentSystem().Configure(app);
+    new SvgRootSystem().Configure(app);
     new SvgPlayerMoveControlSystem().Configure(app);
     new SvgPlayerActionControlSystem().Configure(app);
     new ThreeSystem().Configure(app);
     new ThreeGraphicsSpriteSystem().Configure(app);
 
+    app.db.Insert(new Root());
 
     let toby = new Tob();
     toby.x = 0;

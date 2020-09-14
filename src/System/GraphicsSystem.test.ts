@@ -5,12 +5,14 @@ import { Floor } from "../Blocks/Floor";
 import { GraphicsSprite } from "../Blocks/GraphicsSprite";
 import { expect } from "chai";
 import { Tob } from "../Blocks/Tob";
+import { Root } from "../Blocks/Root";
 
 
 describe('GraphicsSystem', function () {
     it('Add Floor', function () {
         let app = new App().CreateNoDom();
         new GraphicsSystem().Configure(app);
+        app.db.Insert(new Root());
 
         let floor = new Floor();
         floor.x = 1;
@@ -27,6 +29,7 @@ describe('GraphicsSystem', function () {
     it('Add Toby', function () {
         let app = new App().CreateNoDom();
         new GraphicsSystem().Configure(app);
+        app.db.Insert(new Root());
 
         let toby = new Tob();
         toby.x = 1;

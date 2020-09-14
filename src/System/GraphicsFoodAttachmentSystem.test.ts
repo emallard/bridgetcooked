@@ -12,6 +12,7 @@ import { Supply } from "../Blocks/Supply";
 import { TobActionSupply } from "../Blocks/TobActionSupply";
 import { Food } from "../Blocks/Food";
 import { FoodAttachment } from "../Blocks/FoodAttachment";
+import { Root } from "../Blocks/Root";
 
 
 describe('GraphicsFoodAttachmentSystem', function () {
@@ -21,6 +22,7 @@ describe('GraphicsFoodAttachmentSystem', function () {
         new GraphicsSystem().Configure(app);
         new GraphicsFoodAttachmentSystem().Configure(app);
         new SupplySystem().Configure(app);
+        app.db.Insert(new Root());
 
 
         let toby = new Tob();

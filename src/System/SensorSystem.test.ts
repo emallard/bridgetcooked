@@ -13,6 +13,7 @@ import { SensorSystem } from "./SensorSystem";
 import { Supply } from "../Blocks/Supply";
 import { SensorRect } from "./SensorRect";
 import { TobSensor } from "../Blocks/TobSensor";
+import { Root } from "../Blocks/Root";
 
 
 describe('SensorSystem', function () {
@@ -20,6 +21,7 @@ describe('SensorSystem', function () {
     it('Sensor Supply', function () {
         let app = new App().CreateNoDom();
         new SensorSystem().Configure(app);
+        app.db.Insert(new Root());
 
         let toby = new Tob();
         toby.x = 1;

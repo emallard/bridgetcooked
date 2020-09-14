@@ -2,6 +2,7 @@ import { IUpdatable } from "../IUpdatable";
 import { App } from "../App";
 import { PlayerMoveControl } from "../Blocks/PlayerMoveControl";
 import { DbEntity } from "../Db/DbEntity";
+import { SvgRoot } from "./SvgRootSystem";
 
 
 export class SvgPlayerMoveControl extends DbEntity {
@@ -26,7 +27,8 @@ export class SvgPlayerMoveControlSystem implements IUpdatable {
 
 
         app.db.OnInserted(PlayerMoveControl, c => {
-            app.db.Insert(this.CreateSvg());
+            let svgRoot = app.db.First(SvgRoot);
+            app.db.Insert(this.CreateSvg(svgRoot));
         });
 
         app.db.OnUpdated(SvgPlayerMoveControl, c => {
@@ -38,7 +40,9 @@ export class SvgPlayerMoveControlSystem implements IUpdatable {
         })
     }
 
-    CreateSvg(): SvgPlayerMoveControl {
+    CreateSvg(svgRoot: SvgRoot): SvgPlayerMoveControl {
+
+        let svg = svgRoot.svg;
 
         let svgControl = new SvgPlayerMoveControl();
         svgControl.cx = 100;
@@ -46,18 +50,12 @@ export class SvgPlayerMoveControlSystem implements IUpdatable {
         svgControl.touchx = svgControl.cx;
         svgControl.touchy = svgControl.cy;
 
-        let svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
-        svg.style.position = 'fixed';
-        svg.style.top = '0px';
-        svg.style.left = '0px';
-
-
         const cirBack = document.createElementNS("http://www.w3.org/2000/svg", "circle");
-        cirBack.setAttribute("cx", '' + svgControl.touchx);
-        cirBack.setAttribute("cy", '' + svgControl.touchy);
+        cirBack.setAttribute("cx", '' + svgControl.cx);
+        cirBack.setAttribute("cy", '' + svgControl.cy);
         cirBack.setAttribute("r", '' + svgControl.r);
         cirBack.setAttribute("stroke", "red");
-
+        cirBack.setAttribute("fill", "transparent");
         // attach it to the container
         svg.appendChild(cirBack);
 
@@ -100,26 +98,11 @@ export class SvgPlayerMoveControlSystem implements IUpdatable {
             this.app.db.Update(svgControl);
         });
 
-        document.getElementById('movecontrol_container').appendChild(svg);
-        this.DoResize(svg);
-
         return svgControl;
 
     }
 
-    private DoResize(svg: SVGElement) {
-        svg.style.position = 'fixed';
-        svg.style.backgroundColor = 'transparent';
-        let margin = 5;
-        // css margins to create something like a frame around the element
-        // and prevent browsers from making scrollbars visible
-        svg.style.marginLeft = margin + "px";
-        svg.style.marginTop = margin + "px";
 
-        // set svg dimensions
-        svg.setAttribute('width', '' + (window.innerWidth - (margin * 2)));
-        svg.setAttribute('height', '' + (window.innerHeight - (margin * 2)));
-    }
 
     Update(dt: number) {
 
