@@ -6,7 +6,7 @@ import * as THREE from "three";
 import { DbEntity } from "../Db/DbEntity";
 
 export class ThreeGraphicsSprite extends DbEntity {
-    move    graphicsSpriteId: string;
+    graphicsSpriteId: string;
     material: THREE.MeshStandardMaterial;
     geometry: THREE.PlaneGeometry;
     mesh: THREE.Mesh;
