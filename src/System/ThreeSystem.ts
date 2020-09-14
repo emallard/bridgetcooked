@@ -26,6 +26,7 @@ export class ThreeSystem implements IUpdatable {
 
         this.ConfigureRenderer(app);
         this.ConfigureScene(app);
+        this.ConfigureCamera(app);
     }
 
 
@@ -39,7 +40,7 @@ export class ThreeSystem implements IUpdatable {
 
 
     ConfigureCamera(app: App) {
-        let viewSize = 1000;
+        let viewSize = 10;
         var aspect = window.innerWidth / window.innerHeight;
 
         let left = -aspect * viewSize / 2;
@@ -49,15 +50,21 @@ export class ThreeSystem implements IUpdatable {
 
         var camera = new THREE.OrthographicCamera(left, right, top, bottom, 0.1, 1000);
 
+        //camera.position.set(0, 0, 100);
+        //camera.lookAt(0, 0, 0);
+
         let threeCamera = new ThreeCamera();
         threeCamera.camera = camera;
         app.db.Insert(threeCamera);
 
+
         app.db.OnUpdated(Tob, toby => {
+            console.log('threecamera : ', toby.x, toby.y)
             camera.position.set(toby.x, toby.y, 100);
             camera.lookAt(toby.x, toby.y, 0);
             //camera.updateMatrix();
-        })
+        });
+
     }
 
 
@@ -69,6 +76,38 @@ export class ThreeSystem implements IUpdatable {
 
         let threeScene = new ThreeScene();
         threeScene.scene = scene;
+
+
+        let testPlane = function () {
+            var texture = new THREE.TextureLoader().load("Star.png");
+            var material2 = new THREE.MeshStandardMaterial({
+                map: texture,
+                side: THREE.DoubleSide,
+                //color: 0xffff00
+            });
+            var geometry2 = new THREE.PlaneGeometry(5, 4, 1);
+            var plane = new THREE.Mesh(geometry2, material2);
+            scene.add(plane);
+
+        }
+        //testPlane();
+
+        function testLine() {
+            var material = new THREE.LineBasicMaterial({ color: 0x0000ff });
+
+            var points = [];
+            points.push(new THREE.Vector3(0, 0, 0));
+            points.push(new THREE.Vector3(0, 1, 0));
+            points.push(new THREE.Vector3(0, 0, 0));
+            points.push(new THREE.Vector3(1, 0, 0));
+
+            var geometry = new THREE.BufferGeometry().setFromPoints(points);
+            var line = new THREE.Line(geometry, material);
+
+            scene.add(line);
+        }
+        testLine();
+
         app.db.Insert(threeScene);
     }
 

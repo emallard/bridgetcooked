@@ -7,6 +7,8 @@ import { Tob } from "./Blocks/Tob";
 import { Floor } from "./Blocks/Floor";
 import { Supply } from "./Blocks/Supply";
 import { GraphicsSystem } from "./System/GraphicsSystem";
+import { SvgPlayerMoveControlSystem } from "./System/SvgPlayerMoveControlSystem";
+import { ThreeSystem } from "./System/ThreeSystem";
 
 function doResize(svg: SVGElement) {
     svg.style.backgroundColor = 'white';
@@ -69,31 +71,38 @@ export async function newApp() {
 
     let app = new App();
     app.CreateNoDom();
+    app.db.logLevel = 2;
 
-    new MoveSystem().Configure(app);
+
     new GraphicsSystem().Configure(app);
+    new MoveSystem().Configure(app);
+    new SvgPlayerMoveControlSystem().Configure(app);
+    new ThreeSystem().Configure(app);
+
 
     let toby = new Tob();
-    toby.x = 500;
-    toby.y = 400;
+    toby.x = 0;
+    toby.y = 0;
     app.db.Insert(toby);
 
 
+    function Test1() {
+        for (let x = 0; x < 10; ++x) {
+            let floor = new Floor();
+            floor.url = 'StoneBlock.png';
+            floor.x = x * 100;
+            floor.y = 0;
+            app.db.Insert(floor);
+        }
 
-    for (let x = 0; x < 10; ++x) {
-        let floor = new Floor();
-        floor.url = 'StoneBlock.png';
-        floor.x = x * 100;
-        floor.y = 0;
-        app.db.Insert(floor);
+        let supply = new Supply();
+        supply.x = 0;
+        supply.y = 200;
+        app.db.Insert(supply);
     }
 
-    let supply = new Supply();
-    supply.x = 0;
-    supply.y = 200;
-    app.db.Insert(supply);
 
-
+    setInterval(() => app.Update(0.1), 500);
 }
 
 

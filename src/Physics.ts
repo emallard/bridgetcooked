@@ -1,4 +1,4 @@
-import { CollisionRect } from "./System/CollisionRect";
+import { CollisionRect } from "./Blocks/CollisionRect";
 
 
 export class Physics {

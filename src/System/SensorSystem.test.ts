@@ -8,7 +8,7 @@ import { Tob } from "../Blocks/Tob";
 import { TobMoveControl } from "../Blocks/TobMoveControl";
 import { MoveSystem } from "./MoveSystem";
 import { PlayerMoveControl } from "../Blocks/PlayerMoveControl";
-import { TobConstrainedMoveControl } from "../Blocks/TobConstrainedMoveControl";
+import { TobConstrainedMove } from "../Blocks/TobConstrainedMove";
 import { SensorSystem } from "./SensorSystem";
 import { Supply } from "../Blocks/Supply";
 import { SensorRect } from "./SensorRect";

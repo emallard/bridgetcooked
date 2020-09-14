@@ -49,20 +49,13 @@ export class Graphics {
 
 
         var texture = new THREE.TextureLoader().load("Star.png");
-
-
         var material2 = new THREE.MeshStandardMaterial({
             map: texture,
             side: THREE.DoubleSide,
             //color: 0xffff00
         });
-
-        //let material2 = new THREE.MeshBasicMaterial({ color: 0xffff00, side: THREE.DoubleSide });
-
         var geometry2 = new THREE.PlaneGeometry(5, 4, 1);
         var plane = new THREE.Mesh(geometry2, material2);
-
-
         scene.add(plane);
 
 
