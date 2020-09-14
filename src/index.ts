@@ -9,6 +9,8 @@ import { Supply } from "./Blocks/Supply";
 import { GraphicsSystem } from "./System/GraphicsSystem";
 import { SvgPlayerMoveControlSystem } from "./System/SvgPlayerMoveControlSystem";
 import { ThreeSystem } from "./System/ThreeSystem";
+import { ThreeGraphicsSpriteSystem } from "./System/ThreeGraphicsSpriteSystem";
+import * as THREE from "three";
 
 function doResize(svg: SVGElement) {
     svg.style.backgroundColor = 'white';
@@ -26,7 +28,7 @@ function doResize(svg: SVGElement) {
 
 export async function newApp() {
 
-    console.log('bridget');
+    console.log('happy birthday bridget');
 
 
     /*
@@ -71,13 +73,14 @@ export async function newApp() {
 
     let app = new App();
     app.CreateNoDom();
-    app.db.logLevel = 2;
+    //app.db.logLevel = 2;
 
 
     new GraphicsSystem().Configure(app);
     new MoveSystem().Configure(app);
     new SvgPlayerMoveControlSystem().Configure(app);
     new ThreeSystem().Configure(app);
+    new ThreeGraphicsSpriteSystem().Configure(app);
 
 
     let toby = new Tob();
@@ -101,8 +104,17 @@ export async function newApp() {
         app.db.Insert(supply);
     }
 
+    Test1();
 
-    setInterval(() => app.Update(0.1), 500);
+    var clock = new THREE.Clock();
+    function update() {
+        //requestAnimationFrame(update);
+
+        let delta = clock.getDelta();
+        app.Update(delta);
+    }
+
+    setInterval(update, 0);
 }
 
 

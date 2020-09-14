@@ -102,8 +102,8 @@ export class MoveSystem implements IUpdatable {
         tobConstrainedMoveControl.constrainedMoveX = tobMoveControl.moveX;
         tobConstrainedMoveControl.constrainedMoveY = tobMoveControl.moveY;
 
-        tob.x += tobConstrainedMoveControl.constrainedMoveX;
-        tob.y += tobConstrainedMoveControl.constrainedMoveY;
+        tob.x += tobConstrainedMoveControl.constrainedMoveX * dt * 200;
+        tob.y += tobConstrainedMoveControl.constrainedMoveY * dt * 200;
 
         this.app.db.Update(tob);
     }

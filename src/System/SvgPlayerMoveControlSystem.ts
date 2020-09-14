@@ -83,8 +83,8 @@ export class SvgPlayerMoveControlSystem implements IUpdatable {
             svgControl.touchx = touch.clientX - rect.left; //x position within the element.
             svgControl.touchy = touch.clientY - rect.top; //y position within the element.
 
-            svgControl.cir1.setAttribute("cx", '' + svgControl.cx);
-            svgControl.cir1.setAttribute("cy", '' + svgControl.cy);
+            svgControl.cir1.setAttribute("cx", '' + svgControl.touchx);
+            svgControl.cir1.setAttribute("cy", '' + svgControl.touchy);
 
             this.app.db.Update(svgControl);
         });

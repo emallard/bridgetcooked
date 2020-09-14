@@ -34,7 +34,7 @@ describe('MoveSystem', function () {
         tobMoveControl.moveX = 3;
         tobMoveControl.moveY = 4;
         app.db.Update(tobMoveControl);
-        app.Update(0.1);
+        app.Update(1);
 
         expect(tobConstrainedMoveControl.constrainedMoveX).equals(3);
         expect(tobConstrainedMoveControl.constrainedMoveY).equals(4);
@@ -62,7 +62,7 @@ describe('MoveSystem', function () {
         playerMoveControl.touchX = playerMoveControl.cx + 200;
         playerMoveControl.touchY = playerMoveControl.cy;
         app.db.Update(playerMoveControl);
-        app.Update(0.1);
+        app.Update(1);
 
         expect(tobMoveControl.moveX).equals(1);
         expect(tobMoveControl.moveY).equals(0);
@@ -87,7 +87,7 @@ describe('MoveSystem', function () {
         playerMoveControl.touchX = playerMoveControl.cx;
         playerMoveControl.touchY = playerMoveControl.cy + 200;
         app.db.Update(playerMoveControl);
-        app.Update(0.1);
+        app.Update(1);
 
         expect(tobMoveControl.moveX).equals(0);
         expect(tobMoveControl.moveY).equals(-1);

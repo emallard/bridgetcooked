@@ -10,7 +10,8 @@ export class ThreeRenderer extends DbEntity {
 }
 
 export class ThreeScene extends DbEntity {
-    scene: THREE.Scene;
+    backgroundScene: THREE.Scene;
+    foregroundScene: THREE.Scene;
 }
 
 export class ThreeCamera extends DbEntity {
@@ -35,12 +36,18 @@ export class ThreeSystem implements IUpdatable {
         let threeScene = this.app.db.First(ThreeScene);
         let threeCamera = this.app.db.First(ThreeCamera);
 
-        threeRenderer.renderer.render(threeScene.scene, threeCamera.camera);
+        threeRenderer.renderer.autoClearColor = false;
+        threeRenderer.renderer.setClearColor('red', 0);
+        threeRenderer.renderer.clear();
+        threeRenderer.renderer.render(threeScene.backgroundScene, threeCamera.camera);
+        threeRenderer.renderer.clearDepth();
+        //threeRenderer.renderer.clear();
+        threeRenderer.renderer.render(threeScene.foregroundScene, threeCamera.camera);
     }
 
 
     ConfigureCamera(app: App) {
-        let viewSize = 10;
+        let viewSize = window.innerWidth;
         var aspect = window.innerWidth / window.innerHeight;
 
         let left = -aspect * viewSize / 2;
@@ -59,7 +66,6 @@ export class ThreeSystem implements IUpdatable {
 
 
         app.db.OnUpdated(Tob, toby => {
-            console.log('threecamera : ', toby.x, toby.y)
             camera.position.set(toby.x, toby.y, 100);
             camera.lookAt(toby.x, toby.y, 0);
             //camera.updateMatrix();
@@ -69,13 +75,19 @@ export class ThreeSystem implements IUpdatable {
 
 
     ConfigureScene(app: App) {
-        let scene = new THREE.Scene;
+        let backgroundScene = new THREE.Scene;
         const light = new THREE.AmbientLight(0xffffff);
         light.position.set(0, 0, 1);
-        scene.add(light);
+        backgroundScene.add(light);
+
+        let foregroundScene = new THREE.Scene;
+        const light2 = new THREE.AmbientLight(0xffffff);
+        light2.position.set(0, 0, 1);
+        foregroundScene.add(light2);
 
         let threeScene = new ThreeScene();
-        threeScene.scene = scene;
+        threeScene.backgroundScene = backgroundScene;
+        threeScene.foregroundScene = foregroundScene;
 
 
         let testPlane = function () {
@@ -85,9 +97,10 @@ export class ThreeSystem implements IUpdatable {
                 side: THREE.DoubleSide,
                 //color: 0xffff00
             });
-            var geometry2 = new THREE.PlaneGeometry(5, 4, 1);
+            var geometry2 = new THREE.PlaneGeometry(1, 1, 1);
             var plane = new THREE.Mesh(geometry2, material2);
-            scene.add(plane);
+            plane.scale.set(500, 500, 1);
+            backgroundScene.add(plane);
 
         }
         //testPlane();
@@ -97,14 +110,16 @@ export class ThreeSystem implements IUpdatable {
 
             var points = [];
             points.push(new THREE.Vector3(0, 0, 0));
-            points.push(new THREE.Vector3(0, 1, 0));
+            points.push(new THREE.Vector3(0, 80 / 2, 0));
+            points.push(new THREE.Vector3(0, -80 / 2, 0));
             points.push(new THREE.Vector3(0, 0, 0));
-            points.push(new THREE.Vector3(1, 0, 0));
+            points.push(new THREE.Vector3(101 / 2, 0, 0));
+            points.push(new THREE.Vector3(-101 / 2, 0, 0));
 
             var geometry = new THREE.BufferGeometry().setFromPoints(points);
             var line = new THREE.Line(geometry, material);
 
-            scene.add(line);
+            backgroundScene.add(line);
         }
         testLine();
 

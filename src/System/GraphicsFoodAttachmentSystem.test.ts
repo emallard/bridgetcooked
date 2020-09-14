@@ -36,7 +36,7 @@ describe('GraphicsFoodAttachmentSystem', function () {
         foodAttachment.idAttached = toby.id;
         app.db.Insert(foodAttachment);
 
-        app.Update(0.1);
+        app.Update(1);
 
         let foodSprite = app.db.First(GraphicsSprite, x => x.userId == food.id);
 
@@ -48,7 +48,7 @@ describe('GraphicsFoodAttachmentSystem', function () {
         toby.y = 6;
         app.db.Update(toby);
 
-        app.Update(0.1);
+        app.Update(1);
 
         expect(foodSprite.x).equals(5);
         expect(foodSprite.y).equals(6);

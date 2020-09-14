@@ -16,6 +16,7 @@ export class GraphicsSystem implements IUpdatable {
             graphicsSprite.userId = floor.id;
             graphicsSprite.x = floor.x;
             graphicsSprite.y = floor.y;
+            graphicsSprite.z = 0;
             graphicsSprite.url = floor.url;
             graphicsSprite.width = GraphicsSystem.SpriteWidth();
             graphicsSprite.height = GraphicsSystem.SpriteHeight();
@@ -28,9 +29,11 @@ export class GraphicsSystem implements IUpdatable {
             graphicsSprite.userId = toby.id;
             graphicsSprite.x = toby.x;
             graphicsSprite.y = toby.y;
+            graphicsSprite.z = 1;
             graphicsSprite.url = 'CharacterCatGirlDown.png';
             graphicsSprite.width = GraphicsSystem.SpriteWidth();
             graphicsSprite.height = GraphicsSystem.SpriteHeight();
+            graphicsSprite.isForeground = true;
             app.db.Insert(graphicsSprite);
         });
 
@@ -50,6 +53,6 @@ export class GraphicsSystem implements IUpdatable {
     }
 
     static SpriteHeight(): number {
-        return 130;
+        return 80;
     }
 }
