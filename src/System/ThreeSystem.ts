@@ -47,7 +47,7 @@ export class ThreeSystem implements IUpdatable {
 
 
     ConfigureCamera(app: App) {
-        let viewSize = window.innerWidth;
+        let viewSize = window.innerHeight;
         var aspect = window.innerWidth / window.innerHeight;
 
         let left = -aspect * viewSize / 2;

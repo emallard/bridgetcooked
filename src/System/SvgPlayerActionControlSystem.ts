@@ -17,10 +17,10 @@ export class SvgPlayerActionControlSystem implements IUpdatable {
         button.style.position = 'fixed';
         button.style.backgroundColor = 'green';
         button.style.right = '100' + "px";
-        button.style.top = '200' + "px";
+        button.style.top = '150' + "px";
 
-        button.style.height = '50' + "px";
-        button.style.width = '50' + "px";
+        button.style.height = '100' + "px";
+        button.style.width = '100' + "px";
 
         button.addEventListener('click', () => {
             let actionControl = app.db.First(PlayerAction);

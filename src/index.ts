@@ -17,6 +17,7 @@ import { GraphicsFoodAttachmentSystem } from "./System/GraphicsFoodAttachmentSys
 import { Table } from "./Blocks/Table";
 import { PlayerActionSystem } from "./System/PlayerActionSystem";
 import { TableSystem } from "./System/TableSystem";
+import { Graphics } from "./Graphics";
 
 function doResize(svg: SVGElement) {
     svg.style.backgroundColor = 'white';
@@ -101,23 +102,71 @@ export async function newApp() {
 
 
     function Test1() {
-        for (let x = 0; x < 10; ++x) {
-            let floor = new Floor();
-            floor.url = 'StoneBlock.png';
-            floor.x = x * 100;
-            floor.y = 0;
-            app.db.Insert(floor);
-        }
 
         let supply = new Supply();
         supply.x = 0;
-        supply.y = 200;
+        supply.y = 2 * GraphicsSystem.SpriteHeight();
         app.db.Insert(supply);
 
-        let table = new Table();
-        table.x = 200;
-        table.y = 200;
+        let table: Table;
+        for (let tx = 0; tx < 3; ++tx) {
+            table = new Table();
+            table.x = tx * GraphicsSystem.SpriteWidth();
+            table.y = 4 * GraphicsSystem.SpriteHeight();
+            app.db.Insert(table);
+        }
+
+
+
+        table = new Table();
+        table.x = 2 * GraphicsSystem.SpriteWidth();
+        table.y = 2 * GraphicsSystem.SpriteHeight();
         app.db.Insert(table);
+
+        for (let ix = 0; ix < 10; ++ix) {
+            for (let iy = 0; iy < 10; ++iy) {
+                let x = ix * GraphicsSystem.SpriteWidth();;
+                let y = iy * GraphicsSystem.SpriteHeight();
+
+                // insert or not :
+                let doInsert = true;
+                for (let supply of app.db.GetAll(Supply)) {
+                    if (x == supply.x && y == supply.y)
+                        doInsert = false;
+                }
+
+                for (let table of app.db.GetAll(Table)) {
+                    if (x == table.x && y == table.y)
+                        doInsert = false;
+                }
+                if (!doInsert)
+                    continue;
+
+
+                let floor = new Floor();
+
+                let shadow = false;
+                for (let supply of app.db.GetAll(Supply)) {
+                    if (x == supply.x && y == supply.y - GraphicsSystem.SpriteHeight())
+                        shadow = true;
+                }
+
+                for (let table of app.db.GetAll(Table)) {
+                    if (x == table.x && y == table.y - GraphicsSystem.SpriteHeight())
+                        shadow = true;
+                }
+
+                if (shadow == true)
+                    floor.url = 'StoneBlockShadow.png';
+                else
+                    floor.url = 'StoneBlock.png';
+                floor.x = x;
+                floor.y = y;
+                app.db.Insert(floor);
+            }
+        }
+
+
     }
 
     Test1();
