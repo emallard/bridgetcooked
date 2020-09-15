@@ -1,6 +1,7 @@
 import { IUpdatable } from "../IUpdatable";
 import { App } from "../App";
-import { TobActionSupply, TobActionTable } from "../Blocks/TobActionSupply";
+import { TobActionSupply } from "../Blocks/TobActionSupply";
+import { TobActionTable } from "../Blocks/TobActionTable";
 import { Tob } from "../Blocks/Tob";
 import { Food } from "../Blocks/Food";
 import { FoodAttachment } from "../Blocks/FoodAttachment";
@@ -28,9 +29,11 @@ export class SupplySystem implements IUpdatable {
             if (action.idSupply == null)
                 return;
 
+            let supply = this.app.db.GetById(Supply, action.idSupply);
             let toby = this.app.db.First(Tob);
 
             let food = new Food();
+            food.foodType = supply.foodType;
             this.app.db.Insert(food);
 
             let foodAttachment = new FoodAttachment();

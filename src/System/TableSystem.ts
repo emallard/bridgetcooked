@@ -1,6 +1,7 @@
 import { IUpdatable } from "../IUpdatable";
 import { App } from "../App";
-import { TobActionSupply, TobActionTable } from "../Blocks/TobActionSupply";
+import { TobActionSupply } from "../Blocks/TobActionSupply";
+import { TobActionTable } from "../Blocks/TobActionTable";
 import { Tob } from "../Blocks/Tob";
 import { Food } from "../Blocks/Food";
 import { FoodAttachment } from "../Blocks/FoodAttachment";

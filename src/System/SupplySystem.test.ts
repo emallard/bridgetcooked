@@ -10,6 +10,7 @@ import { FoodAttachment } from "../Blocks/FoodAttachment";
 import { PlayerAction } from "../Blocks/PlayerAction";
 import { PlayerActionSystem } from "./PlayerActionSystem";
 import { Root } from "../Blocks/Root";
+import { FoodType } from "../Blocks/FoodType";
 
 
 describe('SupplySystem', function () {
@@ -26,6 +27,7 @@ describe('SupplySystem', function () {
         expect(app.db.Count(TobActionSupply)).equal(1);
 
         let supply = new Supply();
+        supply.foodType = FoodType.Kiwi;
         app.db.Insert(supply);
 
         expect(app.db.Count(Food)).equal(0);
@@ -41,6 +43,8 @@ describe('SupplySystem', function () {
 
         let food = app.db.First(Food);
         let foodAttachment = app.db.First(FoodAttachment);
+
+        expect(food.foodType).equals(FoodType.Kiwi);
         expect(foodAttachment.idFood).equals(food.id);
         expect(foodAttachment.idAttached).equals(toby.id);
     });

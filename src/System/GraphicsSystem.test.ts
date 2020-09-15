@@ -6,6 +6,7 @@ import { GraphicsSprite } from "../Blocks/GraphicsSprite";
 import { expect } from "chai";
 import { Tob } from "../Blocks/Tob";
 import { Root } from "../Blocks/Root";
+import { Knife } from "../Blocks/Knife";
 
 
 describe('GraphicsSystem', function () {
@@ -50,5 +51,22 @@ describe('GraphicsSystem', function () {
 
         expect(s.x).equal(5);
         expect(s.y).equal(6);
+    });
+
+    it('Add Knife', function () {
+        let app = new App().CreateNoDom();
+        new GraphicsSystem().Configure(app);
+        app.db.Insert(new Root());
+
+        let knife = new Knife();
+        knife.x = 1;
+        knife.y = 2;
+        app.db.Insert(knife);
+
+        let s = app.db.First(GraphicsSprite, x => x.userId == knife.id);
+        expect(s.x).equal(1);
+        expect(s.y).equal(2);
+        expect(s.width).equal(GraphicsSystem.SpriteWidth());
+        expect(s.height).equal(GraphicsSystem.SpriteHeight());
     });
 });

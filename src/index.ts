@@ -17,6 +17,8 @@ import { PlayerActionSystem } from "./System/PlayerActionSystem";
 import { TableSystem } from "./System/TableSystem";
 import { SvgRootSystem } from "./System/SvgRootSystem";
 import { Root } from "./Blocks/Root";
+import { FoodType } from './Blocks/FoodType';
+import { Knife } from './Blocks/Knife';
 
 function doResize(svg: SVGElement) {
     svg.style.backgroundColor = 'white';
@@ -67,7 +69,20 @@ export async function newApp() {
         let supply = new Supply();
         supply.x = 0;
         supply.y = 2 * GraphicsSystem.SpriteHeight();
+        supply.foodType = FoodType.Kiwi;
         app.db.Insert(supply);
+
+        supply = new Supply();
+        supply.x = -2 * GraphicsSystem.SpriteWidth();
+        supply.y = 2 * GraphicsSystem.SpriteHeight();
+        supply.foodType = FoodType.Pork;
+        app.db.Insert(supply);
+
+
+        let knife = new Knife();
+        knife.x = -2 * GraphicsSystem.SpriteWidth();
+        knife.y = 4 * GraphicsSystem.SpriteHeight();
+        app.db.Insert(knife);
 
         let table: Table;
         for (let tx = 0; tx < 3; ++tx) {
@@ -76,8 +91,6 @@ export async function newApp() {
             table.y = 4 * GraphicsSystem.SpriteHeight();
             app.db.Insert(table);
         }
-
-
 
         table = new Table();
         table.x = 2 * GraphicsSystem.SpriteWidth();
@@ -100,6 +113,12 @@ export async function newApp() {
                     if (x == table.x && y == table.y)
                         doInsert = false;
                 }
+
+
+                for (let knife of app.db.GetAll(Knife)) {
+                    if (x == knife.x && y == knife.y)
+                        doInsert = false;
+                }
                 if (!doInsert)
                     continue;
 
@@ -114,6 +133,11 @@ export async function newApp() {
 
                 for (let table of app.db.GetAll(Table)) {
                     if (x == table.x && y == table.y - GraphicsSystem.SpriteHeight())
+                        shadow = true;
+                }
+
+                for (let knife of app.db.GetAll(Knife)) {
+                    if (x == knife.x && y == knife.y - GraphicsSystem.SpriteHeight())
                         shadow = true;
                 }
 

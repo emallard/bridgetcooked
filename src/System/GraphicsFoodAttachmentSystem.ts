@@ -6,6 +6,7 @@ import { Tob } from "../Blocks/Tob";
 import { FoodAttachment } from "../Blocks/FoodAttachment";
 import { Food } from "../Blocks/Food";
 import { GraphicsSystem } from "./GraphicsSystem";
+import { FoodType } from "../Blocks/FoodType";
 
 
 export class GraphicsFoodAttachmentSystem implements IUpdatable {
@@ -21,10 +22,23 @@ export class GraphicsFoodAttachmentSystem implements IUpdatable {
             let graphicsSprite = new GraphicsSprite();
             graphicsSprite.userId = food.id;
             graphicsSprite.z = 3;
-            graphicsSprite.url = 'Food.png';
             graphicsSprite.width = GraphicsSystem.SpriteWidth();
             graphicsSprite.height = GraphicsSystem.SpriteHeight();
             app.db.Insert(graphicsSprite);
+
+        });
+
+        app.db.OnUpdated(Food, (food: Food) => {
+            let graphicsSprite = app.db.First(GraphicsSprite, x => x.userId == food.id);
+            console.log('food.foodType = ' + food.foodType);
+            if (food.foodType == FoodType.Kiwi)
+                graphicsSprite.url = 'Kiwi.png';
+            else if (food.foodType == FoodType.KiwiCut)
+                graphicsSprite.url = 'KiwiCut.png';
+            else if (food.foodType == FoodType.Pork)
+                graphicsSprite.url = 'Pork.png';
+            else
+                graphicsSprite.url = 'Food.png';
         });
 
     }
