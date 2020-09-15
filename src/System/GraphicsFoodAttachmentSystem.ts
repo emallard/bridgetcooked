@@ -7,6 +7,7 @@ import { FoodAttachment } from "../Blocks/FoodAttachment";
 import { Food } from "../Blocks/Food";
 import { GraphicsSystem } from "./GraphicsSystem";
 import { FoodType } from "../Blocks/FoodType";
+import { GraphicsSpriteUrl } from "../Blocks/GraphicsSpriteUrl";
 
 
 export class GraphicsFoodAttachmentSystem implements IUpdatable {
@@ -26,19 +27,27 @@ export class GraphicsFoodAttachmentSystem implements IUpdatable {
             graphicsSprite.height = GraphicsSystem.SpriteHeight();
             app.db.Insert(graphicsSprite);
 
+            let spriteUrl = new GraphicsSpriteUrl();
+            spriteUrl.idGraphicsSprite = graphicsSprite.id;
+            spriteUrl.userId = food.id;
+            spriteUrl.url = undefined;
+            this.app.db.Insert(spriteUrl);
         });
 
         app.db.OnUpdated(Food, (food: Food) => {
-            let graphicsSprite = app.db.First(GraphicsSprite, x => x.userId == food.id);
-            console.log('food.foodType = ' + food.foodType);
+            console.log('update foodType = ' + food.foodType);
+
+            let graphicsSpriteUrl = app.db.First(GraphicsSpriteUrl, x => x.userId == food.id);
             if (food.foodType == FoodType.Kiwi)
-                graphicsSprite.url = 'Kiwi.png';
+                graphicsSpriteUrl.url = 'Kiwi.png';
             else if (food.foodType == FoodType.KiwiCut)
-                graphicsSprite.url = 'KiwiCut.png';
+                graphicsSpriteUrl.url = 'KiwiCut.png';
             else if (food.foodType == FoodType.Pork)
-                graphicsSprite.url = 'Pork.png';
+                graphicsSpriteUrl.url = 'Pork.png';
             else
-                graphicsSprite.url = 'Food.png';
+                graphicsSpriteUrl.url = 'Food.png';
+
+            app.db.Update(graphicsSpriteUrl);
         });
 
     }

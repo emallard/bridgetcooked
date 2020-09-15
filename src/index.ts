@@ -19,6 +19,7 @@ import { SvgRootSystem } from "./System/SvgRootSystem";
 import { Root } from "./Blocks/Root";
 import { FoodType } from './Blocks/FoodType';
 import { Knife } from './Blocks/Knife';
+import { KnifeSystem } from './System/KnifeSystem';
 
 function doResize(svg: SVGElement) {
     svg.style.backgroundColor = 'white';
@@ -49,6 +50,7 @@ export async function newApp() {
     new PlayerActionSystem().Configure(app);
     new SupplySystem().Configure(app);
     new TableSystem().Configure(app);
+    new KnifeSystem().Configure(app);
     new GraphicsFoodAttachmentSystem().Configure(app);
     new SvgRootSystem().Configure(app);
     new SvgPlayerMoveControlSystem().Configure(app);

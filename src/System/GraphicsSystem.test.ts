@@ -7,6 +7,7 @@ import { expect } from "chai";
 import { Tob } from "../Blocks/Tob";
 import { Root } from "../Blocks/Root";
 import { Knife } from "../Blocks/Knife";
+import { GraphicsSpriteUrl } from "../Blocks/GraphicsSpriteUrl";
 
 
 describe('GraphicsSystem', function () {
@@ -18,13 +19,21 @@ describe('GraphicsSystem', function () {
         let floor = new Floor();
         floor.x = 1;
         floor.y = 2;
+        floor.url = 'StoneBlock.png';
         app.db.Insert(floor);
 
         let s = app.db.First(GraphicsSprite);
+        expect(s.userId).equal(floor.id);
         expect(s.x).equal(1);
         expect(s.y).equal(2);
         expect(s.width).equal(GraphicsSystem.SpriteWidth());
         expect(s.height).equal(GraphicsSystem.SpriteHeight());
+
+
+        let spriteUrl = app.db.First(GraphicsSpriteUrl);
+        expect(spriteUrl.idGraphicsSprite).equal(s.id);
+        expect(spriteUrl.userId).equal(floor.id);
+        expect(spriteUrl.url).equal('StoneBlock.png');
     });
 
     it('Add Toby', function () {
@@ -42,6 +51,11 @@ describe('GraphicsSystem', function () {
         expect(s.y).equal(2);
         expect(s.width).equal(GraphicsSystem.SpriteWidth());
         expect(s.height).equal(GraphicsSystem.SpriteHeight());
+
+        let spriteUrl = app.db.First(GraphicsSpriteUrl);
+        expect(spriteUrl.idGraphicsSprite).equal(s.id);
+        expect(spriteUrl.userId).equal(toby.id);
+        expect(spriteUrl.url).equal('CharacterCatGirlDown.png');
 
 
         toby.x = 5;
@@ -68,5 +82,11 @@ describe('GraphicsSystem', function () {
         expect(s.y).equal(2);
         expect(s.width).equal(GraphicsSystem.SpriteWidth());
         expect(s.height).equal(GraphicsSystem.SpriteHeight());
+
+
+        let spriteUrl = app.db.First(GraphicsSpriteUrl);
+        expect(spriteUrl.idGraphicsSprite).equal(s.id);
+        expect(spriteUrl.userId).equal(knife.id);
+        expect(spriteUrl.url).equal('CuttingBlock.png');
     });
 });

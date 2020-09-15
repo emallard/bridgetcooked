@@ -4,6 +4,7 @@ import { GraphicsSprite } from "../Blocks/GraphicsSprite";
 import { ThreeScene } from "./ThreeSystem";
 import * as THREE from "three";
 import { DbEntity } from "../Db/DbEntity";
+import { GraphicsSpriteUrl } from "../Blocks/GraphicsSpriteUrl";
 
 export class ThreeGraphicsSprite extends DbEntity {
     graphicsSpriteId: string;
@@ -14,6 +15,7 @@ export class ThreeGraphicsSprite extends DbEntity {
 
 export class ThreeGraphicsSpriteSystem implements IUpdatable {
     app: App;
+    loader = new THREE.TextureLoader();
 
     Configure(app: App) {
         this.app = app;
@@ -21,9 +23,9 @@ export class ThreeGraphicsSpriteSystem implements IUpdatable {
 
         app.db.OnInserted(GraphicsSprite, sprite => {
 
-            var texture = new THREE.TextureLoader().load(sprite.url);
+            //var texture = undefined;//this.loader.load('256.jpg');
             var material2 = new THREE.MeshStandardMaterial({
-                map: texture,
+                //map: texture,
                 side: THREE.DoubleSide,
                 transparent: true,
                 //opacity: 0.5
@@ -55,6 +57,15 @@ export class ThreeGraphicsSpriteSystem implements IUpdatable {
             let threeGraphicsSprite = app.db.First(ThreeGraphicsSprite, x => x.graphicsSpriteId == sprite.id);
             threeGraphicsSprite.mesh.position.set(sprite.x, sprite.y, sprite.z);
             threeGraphicsSprite.mesh.scale.set(sprite.width, sprite.height, 1);
+        });
+
+        app.db.OnUpdated(GraphicsSpriteUrl, spriteUrl => {
+            let threeGraphicsSprite = app.db.First(ThreeGraphicsSprite, x => x.graphicsSpriteId == spriteUrl.idGraphicsSprite);
+            if (spriteUrl.url != undefined) {
+                threeGraphicsSprite.material.map = this.loader.load(spriteUrl.url);
+                threeGraphicsSprite.material.needsUpdate = true;
+            }
+
         });
     }
 

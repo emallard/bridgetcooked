@@ -8,6 +8,13 @@ import { Table } from "../Blocks/Table";
 import { Supply } from "../Blocks/Supply";
 import { FoodType } from "../Blocks/FoodType";
 import { Knife } from "../Blocks/Knife";
+import { GraphicsSpriteUrl } from "../Blocks/GraphicsSpriteUrl";
+
+interface XY {
+    id: string;
+    x: number;
+    y: number;
+}
 
 export class GraphicsSystem implements IUpdatable {
     app: App;
@@ -17,82 +24,31 @@ export class GraphicsSystem implements IUpdatable {
         app.AddUpdatable(this);
 
         app.db.OnInserted(Floor, (floor: Floor) => {
-            let graphicsSprite = new GraphicsSprite();
-            graphicsSprite.userId = floor.id;
-            graphicsSprite.x = floor.x;
-            graphicsSprite.y = floor.y;
-            graphicsSprite.z = 0;
-            graphicsSprite.url = floor.url;
-            graphicsSprite.width = GraphicsSystem.SpriteWidth();
-            graphicsSprite.height = GraphicsSystem.SpriteHeight();
-            app.db.Insert(graphicsSprite);
+            this.OnInserted(floor, floor.url, 0);
         });
 
         app.db.OnInserted(Supply, (supply: Supply) => {
-            let graphicsSprite = new GraphicsSprite();
-            graphicsSprite.userId = supply.id;
-            graphicsSprite.x = supply.x;
-            graphicsSprite.y = supply.y;
-            graphicsSprite.z = 0;
-            graphicsSprite.url = 'SupplyBlock.png';
-            graphicsSprite.width = GraphicsSystem.SpriteWidth();
-            graphicsSprite.height = GraphicsSystem.SpriteHeight();
-
-            app.db.Insert(graphicsSprite);
-
-            let graphicsSprite2 = new GraphicsSprite();
-            graphicsSprite2.userId = supply.id;
-            graphicsSprite2.x = supply.x;
-            graphicsSprite2.y = supply.y;
-            graphicsSprite2.z = 0.1;
+            this.OnInserted(supply, 'SupplyBlock.png', 0);
             if (supply.foodType == FoodType.Kiwi)
-                graphicsSprite2.url = 'Kiwi.png';
+                this.OnInserted(supply, 'Kiwi.png', 0.1);
             else if (supply.foodType == FoodType.Pork)
-                graphicsSprite2.url = 'Pork.png';
+                this.OnInserted(supply, 'Pork.png', 0.1);
             else
-                graphicsSprite2.url = 'Food.png';
-            graphicsSprite2.width = GraphicsSystem.SpriteWidth();
-            graphicsSprite2.height = GraphicsSystem.SpriteHeight();
+                this.OnInserted(supply, 'Food.png', 0.1);
 
-            app.db.Insert(graphicsSprite2);
         });
 
         app.db.OnInserted(Table, (table: Table) => {
-            let graphicsSprite = new GraphicsSprite();
-            graphicsSprite.userId = table.id;
-            graphicsSprite.x = table.x;
-            graphicsSprite.y = table.y;
-            graphicsSprite.z = 0;
-            graphicsSprite.url = 'WoodBlock.png';
-            graphicsSprite.width = GraphicsSystem.SpriteWidth();
-            graphicsSprite.height = GraphicsSystem.SpriteHeight();
-            app.db.Insert(graphicsSprite);
+            this.OnInserted(table, 'WoodBlock.png', 0);
         });
 
         app.db.OnInserted(Knife, (knife: Knife) => {
             console.log('graphics cutting board !')
-            let graphicsSprite = new GraphicsSprite();
-            graphicsSprite.userId = knife.id;
-            graphicsSprite.x = knife.x;
-            graphicsSprite.y = knife.y;
-            graphicsSprite.z = 0;
-            graphicsSprite.url = 'CuttingBlock.png';
-            graphicsSprite.width = GraphicsSystem.SpriteWidth();
-            graphicsSprite.height = GraphicsSystem.SpriteHeight();
-            app.db.Insert(graphicsSprite);
+            this.OnInserted(knife, 'CuttingBlock.png', 0);
         });
 
         app.db.OnInserted(Tob, (toby: Tob) => {
-            let graphicsSprite = new GraphicsSprite();
-            graphicsSprite.userId = toby.id;
-            graphicsSprite.x = toby.x;
-            graphicsSprite.y = toby.y;
-            graphicsSprite.z = 1;
-            graphicsSprite.url = 'CharacterCatGirlDown.png';
-            graphicsSprite.width = GraphicsSystem.SpriteWidth();
-            graphicsSprite.height = GraphicsSystem.SpriteHeight();
-            //graphicsSprite.isForeground = true;
-            app.db.Insert(graphicsSprite);
+            this.OnInserted(toby, 'CharacterCatGirlDown.png', 1);
         });
 
         app.db.OnUpdated(Tob, (toby: Tob) => {
@@ -101,6 +57,23 @@ export class GraphicsSystem implements IUpdatable {
             graphicsSprite.y = toby.y;
             app.db.Update(graphicsSprite);
         });
+    }
+
+    OnInserted(xy: XY, url: string, z: number) {
+        let graphicsSprite = new GraphicsSprite();
+        graphicsSprite.userId = xy.id;
+        graphicsSprite.x = xy.x;
+        graphicsSprite.y = xy.y;
+        graphicsSprite.z = z;
+        graphicsSprite.width = GraphicsSystem.SpriteWidth();
+        graphicsSprite.height = GraphicsSystem.SpriteHeight();
+        this.app.db.Insert(graphicsSprite);
+
+        let spriteUrl = new GraphicsSpriteUrl();
+        spriteUrl.idGraphicsSprite = graphicsSprite.id;
+        spriteUrl.userId = xy.id;
+        spriteUrl.url = url;
+        this.app.db.Insert(spriteUrl);
     }
 
     Update(dt: number) {

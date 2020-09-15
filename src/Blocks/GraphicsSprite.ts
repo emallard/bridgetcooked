@@ -11,10 +11,7 @@ export class GraphicsSprite extends DbEntity {
     width: number;
     height: number;
 
-    url: string;
-
     isForeground = false;
-
 }
 
 
