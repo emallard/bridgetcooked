@@ -2,21 +2,17 @@
 import { App } from "../App";
 import { expect } from "chai";
 import { Tob } from "../Blocks/Tob";
-import { SupplySystem } from "./SupplySystem";
-import { TobActionSupply } from "../Blocks/TobActionSupply";
-import { TobActionTable } from "../Blocks/TobActionTable";
-import { Supply } from "../Blocks/Supply";
 import { Food } from "../Blocks/Food";
 import { FoodAttachment } from "../Blocks/FoodAttachment";
 import { PlayerAction } from "../Blocks/PlayerAction";
 import { PlayerActionSystem } from "./PlayerActionSystem";
-import { TableSystem } from "./TableSystem";
-import { Table } from "../Blocks/Table";
 import { Root } from "../Blocks/Root";
 import { Knife } from "../Blocks/Knife";
 import { FoodType } from "../Blocks/FoodType";
 import { TobActionCut } from "../Blocks/TobActionCut";
 import { KnifeSystem } from "./KnifeSystem";
+import { TobHighlighted } from "../Blocks/TobHighlighted";
+import { HighlightSystem } from "./HighlightSystem";
 
 
 describe('KnifeSystem', function () {
@@ -62,6 +58,7 @@ describe('KnifeSystem', function () {
         let app = new App().CreateNoDom();
         new PlayerActionSystem().Configure(app);
         new KnifeSystem().Configure(app);
+        new HighlightSystem().Configure(app);
         app.db.Insert(new Root());
 
         let toby = new Tob();
@@ -80,17 +77,16 @@ describe('KnifeSystem', function () {
 
         let tobActionCut = app.db.First(TobActionCut);
         let playerAction = app.db.First(PlayerAction);
+        let tobHighlighted = app.db.First(TobHighlighted);
 
 
-        knife.x = 1000;
-        knife.y = 2000;
-        app.db.Update(knife);
+        tobHighlighted.highlightedId = null;
+        app.db.Update(tobHighlighted);
         app.db.Update(playerAction);
         expect(tobActionCut.idKnife).equals(undefined);
 
-        knife.x = 1;
-        knife.y = 2;
-        app.db.Update(knife);
+        tobHighlighted.highlightedId = knife.id;
+        app.db.Update(tobHighlighted);
         app.db.Update(playerAction);
         expect(tobActionCut.idKnife).equal(knife.id);
 

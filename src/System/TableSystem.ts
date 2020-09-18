@@ -8,6 +8,7 @@ import { FoodAttachment } from "../Blocks/FoodAttachment";
 import { PlayerAction } from "../Blocks/PlayerAction";
 import { Supply } from "../Blocks/Supply";
 import { Table } from "../Blocks/Table";
+import { TobHighlighted } from "../Blocks/TobHighlighted";
 
 
 export class TableSystem implements IUpdatable {
@@ -49,13 +50,12 @@ export class TableSystem implements IUpdatable {
         });
 
         this.app.db.OnUpdated(PlayerAction, action => {
-            let tables = app.db.GetAll(Table);
-            let toby = app.db.First(Tob);
             let tobActionTable = app.db.First(TobActionTable);
+            let tobHighlighted = app.db.First(TobHighlighted);
 
-            for (let table of tables) {
-                if (Math.abs(table.x - toby.x) < 50 && Math.abs(table.y - toby.y) < 50) {
-
+            if (tobHighlighted != null && tobHighlighted.highlightedId != null) {
+                let table = app.db.First(Table, x => x.id == tobHighlighted.highlightedId);
+                if (table != null) {
                     console.log('table action !');
                     tobActionTable.idTable = table.id;
                     this.app.db.Update(tobActionTable);

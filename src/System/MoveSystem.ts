@@ -10,11 +10,18 @@ import { DbEntity } from "../Db/DbEntity";
 import { GraphicsSystem } from "./GraphicsSystem";
 import { PhysicsRect, Physics } from "../Physics";
 import { Table } from "../Blocks/Table";
+import { Knife } from "../Blocks/Knife";
 
 
 export class ConstrainedMoveRect extends DbEntity {
     userId: string;
     physicsRect: PhysicsRect;
+}
+
+interface XY {
+    id: string;
+    x: number;
+    y: number;
 }
 
 export class MoveSystem implements IUpdatable {
@@ -49,32 +56,14 @@ export class MoveSystem implements IUpdatable {
         });
 
 
-        app.db.OnInserted(Supply, (supply) => {
-
-            let constrainedMoveRect = new ConstrainedMoveRect();
-            let physicsRect = new PhysicsRect();
-            physicsRect.x = supply.x;
-            physicsRect.y = supply.y;
-            physicsRect.width = GraphicsSystem.SpriteWidth();
-            physicsRect.height = GraphicsSystem.SpriteHeight();
-            constrainedMoveRect.physicsRect = physicsRect;
-            constrainedMoveRect.userId = supply.id;
-
-            app.db.Insert(constrainedMoveRect);
+        app.db.OnInserted(Supply, (x) => {
+            this.OnInserted(x);
         });
-
-        app.db.OnInserted(Table, (table) => {
-
-            let constrainedMoveRect = new ConstrainedMoveRect();
-            let physicsRect = new PhysicsRect();
-            physicsRect.x = table.x;
-            physicsRect.y = table.y;
-            physicsRect.width = GraphicsSystem.SpriteWidth();
-            physicsRect.height = GraphicsSystem.SpriteHeight();
-            constrainedMoveRect.physicsRect = physicsRect;
-            constrainedMoveRect.userId = table.id;
-
-            app.db.Insert(constrainedMoveRect);
+        app.db.OnInserted(Table, (x) => {
+            this.OnInserted(x);
+        });
+        app.db.OnInserted(Knife, (x) => {
+            this.OnInserted(x);
         });
 
 
@@ -110,6 +99,9 @@ export class MoveSystem implements IUpdatable {
         let tob = this.app.db.First(Tob);
         let tobMoveControl = this.app.db.First(TobMoveControl);
 
+        if (tobMoveControl.dirX == 0 && tobMoveControl.dirY == 0)
+            return;
+
         let tobConstrainedMoveControl = this.app.db.First(TobConstrainedMove);
 
         let speedX = tobMoveControl.dirX * MoveSystem.TobySpeed;
@@ -134,5 +126,18 @@ export class MoveSystem implements IUpdatable {
         tob.y = tobConstrainedMoveControl.constrainedMoveY;
 
         this.app.db.Update(tob);
+    }
+
+    OnInserted(xy: XY) {
+        let constrainedMoveRect = new ConstrainedMoveRect();
+        let physicsRect = new PhysicsRect();
+        physicsRect.x = xy.x;
+        physicsRect.y = xy.y;
+        physicsRect.width = GraphicsSystem.SpriteWidth();
+        physicsRect.height = GraphicsSystem.SpriteHeight();
+        constrainedMoveRect.physicsRect = physicsRect;
+        constrainedMoveRect.userId = xy.id;
+
+        this.app.db.Insert(constrainedMoveRect);
     }
 }

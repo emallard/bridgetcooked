@@ -13,6 +13,8 @@ import { PlayerActionSystem } from "./PlayerActionSystem";
 import { TableSystem } from "./TableSystem";
 import { Table } from "../Blocks/Table";
 import { Root } from "../Blocks/Root";
+import { TobHighlighted } from "../Blocks/TobHighlighted";
+import { HighlightSystem } from "./HighlightSystem";
 
 
 describe('TableSystem', function () {
@@ -56,6 +58,7 @@ describe('TableSystem', function () {
         let app = new App().CreateNoDom();
         new PlayerActionSystem().Configure(app);
         new TableSystem().Configure(app);
+        new HighlightSystem().Configure(app);
         app.db.Insert(new Root());
 
         let toby = new Tob();
@@ -71,20 +74,20 @@ describe('TableSystem', function () {
 
         expect(app.db.Count(PlayerAction)).equal(1);
         expect(app.db.Count(TobActionTable)).equal(1);
+        expect(app.db.Count(TobHighlighted)).equal(1);
 
         let tobActionTable = app.db.First(TobActionTable);
         let playerAction = app.db.First(PlayerAction);
+        let tobHighlighted = app.db.First(TobHighlighted);
 
 
-        table.x = 1000;
-        table.y = 2000;
-        app.db.Update(table);
+        tobHighlighted.highlightedId = null;
+        app.db.Update(tobHighlighted);
         app.db.Update(playerAction);
         expect(tobActionTable.idTable).equals(undefined);
 
-        table.x = 1;
-        table.y = 2;
-        app.db.Update(table);
+        tobHighlighted.highlightedId = table.id;
+        app.db.Update(tobHighlighted);
         app.db.Update(playerAction);
         expect(tobActionTable.idTable).equal(table.id);
 

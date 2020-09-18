@@ -20,6 +20,8 @@ import { Root } from "./Blocks/Root";
 import { FoodType } from './Blocks/FoodType';
 import { Knife } from './Blocks/Knife';
 import { KnifeSystem } from './System/KnifeSystem';
+import { HighlightSystem } from './System/HighlightSystem';
+import { GraphicsHighlightSystem } from './System/GraphicsHighlightSystem';
 
 function doResize(svg: SVGElement) {
     svg.style.backgroundColor = 'white';
@@ -46,10 +48,12 @@ export async function newApp() {
 
     new GraphicsSystem().Configure(app);
     new MoveSystem().Configure(app);
+    new HighlightSystem().Configure(app);
     new PlayerActionSystem().Configure(app);
     new SupplySystem().Configure(app);
     new TableSystem().Configure(app);
     new KnifeSystem().Configure(app);
+    new GraphicsHighlightSystem().Configure(app);
     new GraphicsFoodAttachmentSystem().Configure(app);
     new SvgRootSystem().Configure(app);
     new SvgPlayerMoveControlSystem().Configure(app);
@@ -164,13 +168,13 @@ export async function newApp() {
 
     var clock = new THREE.Clock();
     function update() {
-        //requestAnimationFrame(update);
+        requestAnimationFrame(update);
 
         let delta = clock.getDelta();
         app.Update(delta);
     }
 
-    setInterval(update, 0);
+    requestAnimationFrame(update);
 }
 
 

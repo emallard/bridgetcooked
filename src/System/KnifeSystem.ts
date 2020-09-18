@@ -1,16 +1,13 @@
 import { IUpdatable } from "../IUpdatable";
 import { App } from "../App";
-import { TobActionSupply } from "../Blocks/TobActionSupply";
-import { TobActionTable } from "../Blocks/TobActionTable";
 import { Tob } from "../Blocks/Tob";
 import { Food } from "../Blocks/Food";
 import { FoodAttachment } from "../Blocks/FoodAttachment";
 import { PlayerAction } from "../Blocks/PlayerAction";
-import { Supply } from "../Blocks/Supply";
-import { Table } from "../Blocks/Table";
 import { TobActionCut } from "../Blocks/TobActionCut";
 import { FoodType } from "../Blocks/FoodType";
 import { Knife } from "../Blocks/Knife";
+import { TobHighlighted } from "../Blocks/TobHighlighted";
 
 
 export class KnifeSystem implements IUpdatable {
@@ -21,7 +18,7 @@ export class KnifeSystem implements IUpdatable {
         this.app = app;
         app.AddUpdatable(this);
 
-        this.app.db.OnInserted(Tob, (tob) => {
+        this.app.db.OnInserted(Tob, () => {
             let tobActionCut = new TobActionCut();
             app.db.Insert(tobActionCut);
         });
@@ -68,14 +65,13 @@ export class KnifeSystem implements IUpdatable {
             */
         });
 
-        this.app.db.OnUpdated(PlayerAction, action => {
-            let knives = app.db.GetAll(Knife);
-            let toby = app.db.First(Tob);
+        this.app.db.OnUpdated(PlayerAction, () => {
             let tobActionCut = app.db.First(TobActionCut);
+            let tobHighlighted = app.db.First(TobHighlighted);
 
-            for (let knife of knives) {
-                if (Math.abs(knife.x - toby.x) < 50 && Math.abs(knife.y - toby.y) < 50) {
-
+            if (tobHighlighted != null && tobHighlighted.highlightedId != null) {
+                let knife = app.db.First(Knife, x => x.id == tobHighlighted.highlightedId);
+                if (knife != null) {
                     console.log('table action !');
                     tobActionCut.idKnife = knife.id;
                     this.app.db.Update(tobActionCut);

@@ -11,6 +11,8 @@ import { PlayerAction } from "../Blocks/PlayerAction";
 import { PlayerActionSystem } from "./PlayerActionSystem";
 import { Root } from "../Blocks/Root";
 import { FoodType } from "../Blocks/FoodType";
+import { HighlightSystem } from "./HighlightSystem";
+import { TobHighlighted } from "../Blocks/TobHighlighted";
 
 
 describe('SupplySystem', function () {
@@ -55,6 +57,7 @@ describe('SupplySystem', function () {
         let app = new App().CreateNoDom();
         new PlayerActionSystem().Configure(app);
         new SupplySystem().Configure(app);
+        new HighlightSystem().Configure(app);
         app.db.Insert(new Root());
 
         let toby = new Tob();
@@ -74,17 +77,16 @@ describe('SupplySystem', function () {
 
         let tobActionSupply = app.db.First(TobActionSupply);
         let playerAction = app.db.First(PlayerAction);
+        let tobHighlighted = app.db.First(TobHighlighted);
 
 
-        supply.x = 1000;
-        supply.y = 2000;
-        app.db.Update(supply);
+        tobHighlighted.highlightedId = null;
+        app.db.Update(tobHighlighted);
         app.db.Update(playerAction);
         expect(tobActionSupply.idSupply).equals(undefined);
 
-        supply.x = 1;
-        supply.y = 2;
-        app.db.Update(supply);
+        tobHighlighted.highlightedId = supply.id;
+        app.db.Update(tobHighlighted);
         app.db.Update(playerAction);
         expect(tobActionSupply.idSupply).equal(supply.id);
 
