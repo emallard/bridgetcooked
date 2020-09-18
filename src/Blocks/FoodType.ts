@@ -5,5 +5,12 @@ export enum FoodType {
     Kiwi,
     KiwiCut,
     Pork,
-    PorkCut
+    PorkCut,
+
+    Rice,
+    RiceCooked,
+
+    Plate,
+    PlatePorkKiwi,
+    PlateRice,
 }

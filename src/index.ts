@@ -68,21 +68,20 @@ export async function newApp() {
     toby.y = 0;
     app.db.Insert(toby);
 
+    function CreateSupply(x: number, y: number, type: FoodType) {
+        let supply = new Supply();
+        supply.x = x * GraphicsSystem.SpriteWidth();
+        supply.y = y * GraphicsSystem.SpriteHeight();
+        supply.foodType = type;
+        app.db.Insert(supply);
+    }
 
     function Test1() {
 
-        let supply = new Supply();
-        supply.x = 0;
-        supply.y = 2 * GraphicsSystem.SpriteHeight();
-        supply.foodType = FoodType.Kiwi;
-        app.db.Insert(supply);
-
-
-        supply = new Supply();
-        supply.x = -2 * GraphicsSystem.SpriteWidth();
-        supply.y = 2 * GraphicsSystem.SpriteHeight();
-        supply.foodType = FoodType.Pork;
-        app.db.Insert(supply);
+        CreateSupply(0, 2, FoodType.Kiwi);
+        CreateSupply(-2, 2, FoodType.Pork);
+        CreateSupply(-4, 2, FoodType.Plate);
+        CreateSupply(-6, 2, FoodType.Rice);
 
 
         let knife = new Knife();

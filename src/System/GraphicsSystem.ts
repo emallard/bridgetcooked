@@ -33,6 +33,10 @@ export class GraphicsSystem implements IUpdatable {
                 this.OnInserted(supply, 'Kiwi.png', 0.1);
             else if (supply.foodType == FoodType.Pork)
                 this.OnInserted(supply, 'Pork.png', 0.1);
+            else if (supply.foodType == FoodType.Plate)
+                this.OnInserted(supply, 'Plate.png', 0.1);
+            else if (supply.foodType == FoodType.Rice)
+                this.OnInserted(supply, 'Rice.png', 0.1);
             else
                 this.OnInserted(supply, 'Food.png', 0.1);
 
