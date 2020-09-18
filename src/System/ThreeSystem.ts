@@ -128,8 +128,8 @@ export class ThreeSystem implements IUpdatable {
             points.push(new THREE.Vector3(0, 80 / 2, 0));
             points.push(new THREE.Vector3(0, -80 / 2, 0));
             points.push(new THREE.Vector3(0, 0, 0));
-            points.push(new THREE.Vector3(101 / 2, 0, 0));
-            points.push(new THREE.Vector3(-101 / 2, 0, 0));
+            points.push(new THREE.Vector3(100 / 2, 0, 0));
+            points.push(new THREE.Vector3(-100 / 2, 0, 0));
 
             var geometry = new THREE.BufferGeometry().setFromPoints(points);
             var line = new THREE.Line(geometry, material);

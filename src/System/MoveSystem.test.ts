@@ -6,10 +6,11 @@ import { GraphicsSprite } from "../Blocks/GraphicsSprite";
 import { expect } from "chai";
 import { Tob } from "../Blocks/Tob";
 import { TobMoveControl } from "../Blocks/TobMoveControl";
-import { MoveSystem } from "./MoveSystem";
+import { MoveSystem, ConstrainedMoveRect } from "./MoveSystem";
 import { PlayerMoveControl } from "../Blocks/PlayerMoveControl";
 import { TobConstrainedMove } from "../Blocks/TobConstrainedMove";
 import { Root } from "../Blocks/Root";
+import { Supply } from "../Blocks/Supply";
 
 
 describe('MoveSystem', function () {
@@ -33,17 +34,15 @@ describe('MoveSystem', function () {
         expect(toby.x).equals(1);
         expect(toby.y).equals(2);
 
-        tobMoveControl.moveX = 3;
-        tobMoveControl.moveY = 4;
+        tobMoveControl.dirX = 3;
+        tobMoveControl.dirY = 4;
         app.db.Update(tobMoveControl);
-        app.Update(1);
+        app.Update(0.1);
 
-        expect(tobConstrainedMoveControl.constrainedMoveX).equals(3);
-        expect(tobConstrainedMoveControl.constrainedMoveY).equals(4);
-
-        expect(toby.x).equals(1 + 3 * 200);
-        expect(toby.y).equals(2 + 4 * 200);
+        expect(tobConstrainedMoveControl.constrainedMoveX).approximately(1 + tobMoveControl.dirX * MoveSystem.TobySpeed * 0.1, 0.1);
+        expect(tobConstrainedMoveControl.constrainedMoveY).approximately(2 + tobMoveControl.dirY * MoveSystem.TobySpeed * 0.1, 0.1);
     });
+
 
     it('PlayerMoveControl to TobMove X', function () {
         let app = new App().CreateNoDom();
@@ -67,8 +66,8 @@ describe('MoveSystem', function () {
         app.db.Update(playerMoveControl);
         app.Update(1);
 
-        expect(tobMoveControl.moveX).equals(1);
-        expect(tobMoveControl.moveY).equals(0);
+        expect(tobMoveControl.dirX).equals(1);
+        expect(tobMoveControl.dirY).equals(0);
     });
 
     it('PlayerMoveControl to TobMove Y', function () {
@@ -93,7 +92,34 @@ describe('MoveSystem', function () {
         app.db.Update(playerMoveControl);
         app.Update(1);
 
-        expect(tobMoveControl.moveX).equals(0);
-        expect(tobMoveControl.moveY).equals(-1);
+        expect(tobMoveControl.dirX).equals(0);
+        expect(tobMoveControl.dirY).equals(-1);
     });
+
+
+    //
+    //  ConstrainedMoveRect
+    //
+
+    it('Supply creates a ConstrainedMoveRect', function () {
+        let app = new App().CreateNoDom();
+        new MoveSystem().Configure(app);
+        app.db.Insert(new Root());
+
+        let supply = new Supply();
+        supply.x = 1;
+        supply.y = 2;
+        app.db.Insert(supply);
+
+        expect(app.db.Count(ConstrainedMoveRect)).equals(1);
+
+        let constrainedMoveRect = app.db.First(ConstrainedMoveRect);
+
+        expect(constrainedMoveRect.userId).equals(supply.id);
+        expect(constrainedMoveRect.physicsRect.x).equals(1);
+        expect(constrainedMoveRect.physicsRect.y).equals(2);
+        expect(constrainedMoveRect.physicsRect.width).equals(GraphicsSystem.SpriteWidth());
+        expect(constrainedMoveRect.physicsRect.height).equals(GraphicsSystem.SpriteHeight());
+    });
+
 });

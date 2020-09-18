@@ -80,7 +80,7 @@ export class GraphicsSystem implements IUpdatable {
     }
 
     static SpriteWidth(): number {
-        return 101;
+        return 100;
     }
 
     static SpriteHeight(): number {

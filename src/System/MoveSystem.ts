@@ -6,11 +6,22 @@ import { TobMoveControl } from "../Blocks/TobMoveControl";
 import { TobConstrainedMove as TobConstrainedMove } from "../Blocks/TobConstrainedMove";
 import { Supply } from "../Blocks/Supply";
 import { Wall } from "../Blocks/Wall";
-import { CollisionRect } from "../Blocks/CollisionRect";
+import { DbEntity } from "../Db/DbEntity";
+import { GraphicsSystem } from "./GraphicsSystem";
+import { PhysicsRect, Physics } from "../Physics";
+import { Table } from "../Blocks/Table";
+
+
+export class ConstrainedMoveRect extends DbEntity {
+    userId: string;
+    physicsRect: PhysicsRect;
+}
 
 export class MoveSystem implements IUpdatable {
 
     app: App;
+
+    static TobySpeed = 200;
 
 
     Configure(app: App) {
@@ -24,8 +35,8 @@ export class MoveSystem implements IUpdatable {
             app.db.Insert(tobConstrainedMove);
 
             let tobMove = new TobMoveControl();
-            tobMove.moveX = 0;
-            tobMove.moveY = 0;
+            tobMove.dirX = 0;
+            tobMove.dirY = 0;
             app.db.Insert(tobMove);
 
             let moveControl = new PlayerMoveControl();
@@ -35,6 +46,35 @@ export class MoveSystem implements IUpdatable {
             moveControl.touchY = 200;
 
             app.db.Insert(moveControl);
+        });
+
+
+        app.db.OnInserted(Supply, (supply) => {
+
+            let constrainedMoveRect = new ConstrainedMoveRect();
+            let physicsRect = new PhysicsRect();
+            physicsRect.x = supply.x;
+            physicsRect.y = supply.y;
+            physicsRect.width = GraphicsSystem.SpriteWidth();
+            physicsRect.height = GraphicsSystem.SpriteHeight();
+            constrainedMoveRect.physicsRect = physicsRect;
+            constrainedMoveRect.userId = supply.id;
+
+            app.db.Insert(constrainedMoveRect);
+        });
+
+        app.db.OnInserted(Table, (table) => {
+
+            let constrainedMoveRect = new ConstrainedMoveRect();
+            let physicsRect = new PhysicsRect();
+            physicsRect.x = table.x;
+            physicsRect.y = table.y;
+            physicsRect.width = GraphicsSystem.SpriteWidth();
+            physicsRect.height = GraphicsSystem.SpriteHeight();
+            constrainedMoveRect.physicsRect = physicsRect;
+            constrainedMoveRect.userId = table.id;
+
+            app.db.Insert(constrainedMoveRect);
         });
 
 
@@ -57,53 +97,41 @@ export class MoveSystem implements IUpdatable {
                 dy /= length;
             }
 
-            tobMoveControl.moveX = dx;
-            tobMoveControl.moveY = -dy;
+            tobMoveControl.dirX = dx;
+            tobMoveControl.dirY = -dy;
 
             app.db.Update(tobMoveControl);
             //}
         });
 
-
-        //this.ConfigureConstrainedMove(app);
     }
-
-
-    ConfigureConstrainedMove(app: App) {
-
-        let blockWidth = 101;
-        let blockHeight = 80;
-        function InsertCollisionRect(id: string, x: number, y: number) {
-            let collisionRect = new CollisionRect();
-            collisionRect.userId = id;
-            collisionRect.x = x;
-            collisionRect.y = y;
-            collisionRect.width = blockWidth;
-            collisionRect.height = blockHeight;
-            app.db.Insert(collisionRect);
-        }
-
-        app.db.OnInserted(Supply, (supply) => {
-            InsertCollisionRect(supply.id, supply.x, supply.y);
-        });
-
-        app.db.OnInserted(Wall, (wall) => {
-            InsertCollisionRect(wall.id, wall.x, wall.y);
-        });
-
-    }
-
 
     Update(dt: number) {
         let tob = this.app.db.First(Tob);
         let tobMoveControl = this.app.db.First(TobMoveControl);
 
         let tobConstrainedMoveControl = this.app.db.First(TobConstrainedMove);
-        tobConstrainedMoveControl.constrainedMoveX = tobMoveControl.moveX;
-        tobConstrainedMoveControl.constrainedMoveY = tobMoveControl.moveY;
 
-        tob.x += tobConstrainedMoveControl.constrainedMoveX * dt * 200;
-        tob.y += tobConstrainedMoveControl.constrainedMoveY * dt * 200;
+        let speedX = tobMoveControl.dirX * MoveSystem.TobySpeed;
+        let speedY = tobMoveControl.dirY * MoveSystem.TobySpeed;
+
+        //console.log('targetX : ', targetX, tob.x, tobMoveControl.dirX);
+        //console.log('targetY : ', targetY, tob.y, tobMoveControl.dirY);
+
+        let tobPhysicsRect = new PhysicsRect();
+        tobPhysicsRect.x = tob.x;
+        tobPhysicsRect.y = tob.y;
+        tobPhysicsRect.width = GraphicsSystem.SpriteWidth();
+        tobPhysicsRect.height = GraphicsSystem.SpriteHeight();
+
+        let physicsRect = this.app.db.GetAll(ConstrainedMoveRect).map(x => x.physicsRect);
+        Physics.CollideAll(tobPhysicsRect, physicsRect, speedX, speedY, dt);
+
+        tobConstrainedMoveControl.constrainedMoveX = tobPhysicsRect.x;
+        tobConstrainedMoveControl.constrainedMoveY = tobPhysicsRect.y;
+
+        tob.x = tobConstrainedMoveControl.constrainedMoveX;
+        tob.y = tobConstrainedMoveControl.constrainedMoveY;
 
         this.app.db.Update(tob);
     }

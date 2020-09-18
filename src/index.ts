@@ -39,7 +39,6 @@ export async function newApp() {
 
     console.log('happy birthday bridget');
 
-
     let app = new App();
     app.CreateNoDom();
     //app.db.logLevel = 2;
@@ -74,6 +73,7 @@ export async function newApp() {
         supply.foodType = FoodType.Kiwi;
         app.db.Insert(supply);
 
+
         supply = new Supply();
         supply.x = -2 * GraphicsSystem.SpriteWidth();
         supply.y = 2 * GraphicsSystem.SpriteHeight();
@@ -87,12 +87,16 @@ export async function newApp() {
         app.db.Insert(knife);
 
         let table: Table;
-        for (let tx = 0; tx < 3; ++tx) {
-            table = new Table();
-            table.x = tx * GraphicsSystem.SpriteWidth();
-            table.y = 4 * GraphicsSystem.SpriteHeight();
-            app.db.Insert(table);
-        }
+        table = new Table();
+        table.x = 0 * GraphicsSystem.SpriteWidth();
+        table.y = 4 * GraphicsSystem.SpriteHeight();
+        app.db.Insert(table);
+
+        table = new Table();
+        table.x = 1 * GraphicsSystem.SpriteWidth();
+        table.y = 5 * GraphicsSystem.SpriteHeight();
+        app.db.Insert(table);
+
 
         table = new Table();
         table.x = 2 * GraphicsSystem.SpriteWidth();
