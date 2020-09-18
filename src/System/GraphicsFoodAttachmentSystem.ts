@@ -48,12 +48,18 @@ export class GraphicsFoodAttachmentSystem implements IUpdatable {
                 graphicsSpriteUrl.url = 'PorkCut.png';
             else if (food.foodType == FoodType.PorkKiwiCooked)
                 graphicsSpriteUrl.url = 'PorkKiwiCooked.png';
-            else if (food.foodType == FoodType.Plate)
-                graphicsSpriteUrl.url = 'Plate.png';
             else if (food.foodType == FoodType.Rice)
                 graphicsSpriteUrl.url = 'Rice.png';
             else if (food.foodType == FoodType.RiceCooked)
-                graphicsSpriteUrl.url = 'Rice.png';
+                graphicsSpriteUrl.url = 'RiceCooked.png';
+            else if (food.foodType == FoodType.Plate)
+                graphicsSpriteUrl.url = 'Plate.png';
+            else if (food.foodType == FoodType.PlatePorkKiwiCooked)
+                graphicsSpriteUrl.url = 'PlatePorkKiwi.png';
+            else if (food.foodType == FoodType.PlateRiceCooked)
+                graphicsSpriteUrl.url = 'PlateRice.png';
+            else if (food.foodType == FoodType.PlateEnd)
+                graphicsSpriteUrl.url = 'PlatePorkKiwiRice.png';
             else
                 graphicsSpriteUrl.url = 'Food.png';
 

@@ -12,6 +12,7 @@ export enum FoodType {
     RiceCooked,
 
     Plate,
-    PlatePorkKiwi,
-    PlateRice,
+    PlatePorkKiwiCooked,
+    PlateRiceCooked,
+    PlateEnd
 }

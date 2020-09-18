@@ -38,13 +38,20 @@ export class PanSystem implements IUpdatable {
             // toby has food
             if (tobyFoodAttachment != null) {
                 let tobyFood = this.app.db.GetById(Food, tobyFoodAttachment.idFood);
-                if (tobyFood.foodType != FoodType.PorkCut && tobyFood.foodType != FoodType.KiwiCut)
+                if (tobyFood.foodType != FoodType.PorkCut
+                    && tobyFood.foodType != FoodType.KiwiCut
+                    && tobyFood.foodType != FoodType.Rice)
                     return;
 
                 // if no food in the pan
                 if (panFoodAttachment == null) {
                     tobyFoodAttachment.idAttached = pan.id;
                     app.db.Update(tobyFoodAttachment);
+
+                    if (tobyFood.foodType == FoodType.Rice) {
+                        tobyFood.foodType = FoodType.RiceCooked;
+                        app.db.Update(tobyFood);
+                    }
                 }
                 else {
                     let panFood = this.app.db.GetById(Food, panFoodAttachment.idFood);
@@ -63,7 +70,8 @@ export class PanSystem implements IUpdatable {
             else {
                 if (panFoodAttachment != null) {
                     let panFood = this.app.db.GetById(Food, panFoodAttachment.idFood);
-                    if (panFood.foodType == FoodType.PorkKiwiCooked) {
+                    if (panFood.foodType == FoodType.PorkKiwiCooked
+                        || panFood.foodType == FoodType.RiceCooked) {
                         panFoodAttachment.idAttached = toby.id;
                         app.db.Update(panFoodAttachment);
                     }

@@ -14,7 +14,7 @@ import { Pan } from "../Blocks/Pan";
 
 
 describe('PanSystem', function () {
-    it('TobAction moves FoodAttachment from Toby to Pan then combine Kiwi and Pork and then back to Toby', function () {
+    it('Pan Cook Kiwi and Pork', function () {
         let app = new App().CreateNoDom();
         new PanSystem().Configure(app);
         new PlayerActionSystem().Configure(app);
@@ -53,6 +53,39 @@ describe('PanSystem', function () {
         app.db.Update(tobAction);
         expect(food.foodType).equals(FoodType.PorkKiwiCooked);
         expect(foodPorkAttachment.idAttached).equals(null);
+
+        app.db.Update(tobAction);
+        expect(foodAttachment.idAttached).equals(toby.id);
+    });
+
+
+    it('Pan Cook Rice', function () {
+
+        let app = new App().CreateNoDom();
+        new PanSystem().Configure(app);
+        new PlayerActionSystem().Configure(app);
+        app.db.Insert(new Root());
+
+        let toby = new Tob();
+        app.db.Insert(toby);
+
+        let pan = new Pan();
+        app.db.Insert(pan);
+
+        let food = new Food();
+        food.foodType = FoodType.Rice;
+        app.db.Insert(food);
+        let foodAttachment = new FoodAttachment();
+        foodAttachment.idFood = food.id;
+        foodAttachment.idAttached = toby.id;
+        app.db.Insert(foodAttachment);
+
+        let tobAction = app.db.First(TobAction);
+        tobAction.targetId = pan.id;
+        app.db.Update(tobAction);
+        expect(foodAttachment.idAttached).equals(pan.id);
+        expect(food.foodType).equals(FoodType.RiceCooked);
+
 
         app.db.Update(tobAction);
         expect(foodAttachment.idAttached).equals(toby.id);
