@@ -9,6 +9,7 @@ import { HighlightableRect } from "../Blocks/HighlightableRect";
 import { TobHighlighted } from "../Blocks/TobHighlighted";
 import { Supply } from "../Blocks/Supply";
 import { Knife } from "../Blocks/Knife";
+import { Pan } from "../Blocks/Pan";
 
 interface XY {
     id: string;
@@ -37,6 +38,9 @@ export class HighlightSystem implements IUpdatable {
         app.db.OnInserted(Knife, (x) => {
             this.OnInserted(x);
         });
+        app.db.OnInserted(Pan, (x) => {
+            this.OnInserted(x);
+        });
 
         app.db.OnInserted(Tob, (tob) => {
             let tobHighlighted = new TobHighlighted();
@@ -62,7 +66,7 @@ export class HighlightSystem implements IUpdatable {
                 let physicsRec = allPhysicsRect[i];
                 if (this.CheckRect(tobPhysicsRect, physicsRec)) {
                     tobHighlighted.highlightedId = allHighligtables[i].userId;
-                    console.log('CheckRect !');
+                    //console.log('CheckRect !');
                 }
             }
 

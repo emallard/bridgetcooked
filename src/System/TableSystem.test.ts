@@ -3,8 +3,7 @@ import { App } from "../App";
 import { expect } from "chai";
 import { Tob } from "../Blocks/Tob";
 import { SupplySystem } from "./SupplySystem";
-import { TobActionSupply } from "../Blocks/TobActionSupply";
-import { TobActionTable } from "../Blocks/TobActionTable";
+import { TobAction } from "../Blocks/TobAction";
 import { Supply } from "../Blocks/Supply";
 import { Food } from "../Blocks/Food";
 import { FoodAttachment } from "../Blocks/FoodAttachment";
@@ -21,6 +20,7 @@ describe('TableSystem', function () {
     it('TobActionTable moves FoodAttachment', function () {
         let app = new App().CreateNoDom();
         new TableSystem().Configure(app);
+        new PlayerActionSystem().Configure(app);
         app.db.Insert(new Root());
 
         let toby = new Tob();
@@ -36,61 +36,20 @@ describe('TableSystem', function () {
         foodAttachment.idAttached = toby.id;
         app.db.Insert(foodAttachment);
 
-        expect(app.db.Count(TobActionTable)).equal(1);
-        let tobActionTable = app.db.First(TobActionTable);
+        expect(app.db.Count(TobAction)).equal(1);
+        let tobActionTable = app.db.First(TobAction);
 
 
         expect(foodAttachment.idAttached).equals(toby.id);
 
-        tobActionTable.idTable = table.id;
+        tobActionTable.targetId = table.id;
         app.db.Update(tobActionTable);
         expect(foodAttachment.idAttached).equals(table.id);
 
 
-        tobActionTable.idTable = table.id;
+        tobActionTable.targetId = table.id;
         app.db.Update(tobActionTable);
         expect(foodAttachment.idAttached).equals(toby.id);
-    });
-
-
-
-    it('PlayerAction creates a TobActionTable if close', function () {
-        let app = new App().CreateNoDom();
-        new PlayerActionSystem().Configure(app);
-        new TableSystem().Configure(app);
-        new HighlightSystem().Configure(app);
-        app.db.Insert(new Root());
-
-        let toby = new Tob();
-        toby.x = 1;
-        toby.y = 2;
-        app.db.Insert(toby);
-
-
-        let table = new Table();
-        table.x = 100;
-        table.y = 200;
-        app.db.Insert(table);
-
-        expect(app.db.Count(PlayerAction)).equal(1);
-        expect(app.db.Count(TobActionTable)).equal(1);
-        expect(app.db.Count(TobHighlighted)).equal(1);
-
-        let tobActionTable = app.db.First(TobActionTable);
-        let playerAction = app.db.First(PlayerAction);
-        let tobHighlighted = app.db.First(TobHighlighted);
-
-
-        tobHighlighted.highlightedId = null;
-        app.db.Update(tobHighlighted);
-        app.db.Update(playerAction);
-        expect(tobActionTable.idTable).equals(undefined);
-
-        tobHighlighted.highlightedId = table.id;
-        app.db.Update(tobHighlighted);
-        app.db.Update(playerAction);
-        expect(tobActionTable.idTable).equal(table.id);
-
     });
 
 });

@@ -1,7 +1,6 @@
 import { IUpdatable } from "../IUpdatable";
 import { App } from "../App";
-import { TobActionSupply } from "../Blocks/TobActionSupply";
-import { TobActionTable } from "../Blocks/TobActionTable";
+import { TobAction } from "../Blocks/TobAction";
 import { Tob } from "../Blocks/Tob";
 import { Food } from "../Blocks/Food";
 import { FoodAttachment } from "../Blocks/FoodAttachment";
@@ -20,17 +19,15 @@ export class SupplySystem implements IUpdatable {
         app.AddUpdatable(this);
 
 
-        this.app.db.OnInserted(Tob, (tob) => {
-            let tobActionSupply = new TobActionSupply();
-            app.db.Insert(tobActionSupply);
-        });
+        this.app.db.OnUpdated(TobAction, action => {
 
-        this.app.db.OnUpdated(TobActionSupply, action => {
-
-            if (action.idSupply == null)
+            if (action.targetId == null)
                 return;
 
-            let supply = this.app.db.GetById(Supply, action.idSupply);
+            let supply = this.app.db.First(Supply, x => x.id == action.targetId);
+            if (supply == null)
+                return;
+
             let toby = this.app.db.First(Tob);
 
             let food = new Food();
@@ -42,24 +39,6 @@ export class SupplySystem implements IUpdatable {
             foodAttachment.idFood = food.id;
             this.app.db.Insert(foodAttachment);
         });
-
-
-        this.app.db.OnUpdated(PlayerAction, action => {
-
-            let tobActionSupply = app.db.First(TobActionSupply);
-            let tobHighlighted = app.db.First(TobHighlighted);
-
-            if (tobHighlighted != null && tobHighlighted.highlightedId != null) {
-                let supply = app.db.First(Supply, x => x.id == tobHighlighted.highlightedId);
-                if (supply != null) {
-                    console.log('supply action !');
-                    tobActionSupply.idSupply = supply.id;
-                    this.app.db.Update(tobActionSupply);
-                    return;
-                }
-            }
-        });
-
     }
 
 

@@ -1,7 +1,5 @@
 import { IUpdatable } from "../IUpdatable";
 import { App } from "../App";
-import { TobActionSupply } from "../Blocks/TobActionSupply";
-import { TobActionTable } from "../Blocks/TobActionTable";
 import { Tob } from "../Blocks/Tob";
 import { Food } from "../Blocks/Food";
 import { FoodAttachment } from "../Blocks/FoodAttachment";
@@ -9,6 +7,7 @@ import { PlayerAction } from "../Blocks/PlayerAction";
 import { Supply } from "../Blocks/Supply";
 import { Table } from "../Blocks/Table";
 import { TobHighlighted } from "../Blocks/TobHighlighted";
+import { TobAction } from "../Blocks/TobAction";
 
 
 export class TableSystem implements IUpdatable {
@@ -19,15 +18,14 @@ export class TableSystem implements IUpdatable {
         this.app = app;
         app.AddUpdatable(this);
 
-        this.app.db.OnInserted(Tob, (tob) => {
-            let tobActionTable = new TobActionTable();
-            app.db.Insert(tobActionTable);
-        });
 
+        this.app.db.OnUpdated(TobAction, action => {
 
-        this.app.db.OnUpdated(TobActionTable, action => {
+            if (action.targetId == null)
+                return;
 
-            if (action.idTable == null)
+            let table = app.db.First(Table, x => x.id == action.targetId);
+            if (table == null)
                 return;
 
             let toby = this.app.db.First(Tob);
@@ -35,34 +33,19 @@ export class TableSystem implements IUpdatable {
             // toby to table
             let tobyFoodAttachment = app.db.First(FoodAttachment, x => x.idAttached == toby.id);
             if (tobyFoodAttachment != null) {
-                tobyFoodAttachment.idAttached = action.idTable;
+                tobyFoodAttachment.idAttached = table.id;
                 app.db.Update(tobyFoodAttachment);
                 return;
             }
 
             // table to toby
-            let tableFoodAttachment = app.db.First(FoodAttachment, x => x.idAttached == action.idTable);
+            let tableFoodAttachment = app.db.First(FoodAttachment, x => x.idAttached == table.id);
             if (tableFoodAttachment != null) {
                 tableFoodAttachment.idAttached = toby.id;
                 app.db.Update(tableFoodAttachment);
                 return;
             }
         });
-
-        this.app.db.OnUpdated(PlayerAction, action => {
-            let tobActionTable = app.db.First(TobActionTable);
-            let tobHighlighted = app.db.First(TobHighlighted);
-
-            if (tobHighlighted != null && tobHighlighted.highlightedId != null) {
-                let table = app.db.First(Table, x => x.id == tobHighlighted.highlightedId);
-                if (table != null) {
-                    console.log('table action !');
-                    tobActionTable.idTable = table.id;
-                    this.app.db.Update(tobActionTable);
-                    return;
-                }
-            }
-        })
     }
 
 

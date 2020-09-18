@@ -22,6 +22,8 @@ import { Knife } from './Blocks/Knife';
 import { KnifeSystem } from './System/KnifeSystem';
 import { HighlightSystem } from './System/HighlightSystem';
 import { GraphicsHighlightSystem } from './System/GraphicsHighlightSystem';
+import { Pan } from './Blocks/Pan';
+import { PanSystem } from './System/PanSystem';
 
 function doResize(svg: SVGElement) {
     svg.style.backgroundColor = 'white';
@@ -53,6 +55,7 @@ export async function newApp() {
     new SupplySystem().Configure(app);
     new TableSystem().Configure(app);
     new KnifeSystem().Configure(app);
+    new PanSystem().Configure(app);
     new GraphicsHighlightSystem().Configure(app);
     new GraphicsFoodAttachmentSystem().Configure(app);
     new SvgRootSystem().Configure(app);
@@ -101,7 +104,7 @@ export async function newApp() {
         app.db.Insert(table);
 
 
-        table = new Table();
+        table = new Pan();
         table.x = 2 * GraphicsSystem.SpriteWidth();
         table.y = 2 * GraphicsSystem.SpriteHeight();
         app.db.Insert(table);
@@ -128,6 +131,12 @@ export async function newApp() {
                     if (x == knife.x && y == knife.y)
                         doInsert = false;
                 }
+
+                for (let pan of app.db.GetAll(Pan)) {
+                    if (x == pan.x && y == pan.y)
+                        doInsert = false;
+                }
+
                 if (!doInsert)
                     continue;
 
@@ -147,6 +156,11 @@ export async function newApp() {
 
                 for (let knife of app.db.GetAll(Knife)) {
                     if (x == knife.x && y == knife.y - GraphicsSystem.SpriteHeight())
+                        shadow = true;
+                }
+
+                for (let pan of app.db.GetAll(Pan)) {
+                    if (x == pan.x && y == pan.y - GraphicsSystem.SpriteHeight())
                         shadow = true;
                 }
 

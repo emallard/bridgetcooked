@@ -44,9 +44,15 @@ export class GraphicsFoodAttachmentSystem implements IUpdatable {
                 graphicsSpriteUrl.url = 'KiwiCut.png';
             else if (food.foodType == FoodType.Pork)
                 graphicsSpriteUrl.url = 'Pork.png';
+            else if (food.foodType == FoodType.PorkCut)
+                graphicsSpriteUrl.url = 'PorkCut.png';
+            else if (food.foodType == FoodType.PorkKiwiCooked)
+                graphicsSpriteUrl.url = 'PorkKiwiCooked.png';
             else if (food.foodType == FoodType.Plate)
                 graphicsSpriteUrl.url = 'Plate.png';
             else if (food.foodType == FoodType.Rice)
+                graphicsSpriteUrl.url = 'Rice.png';
+            else if (food.foodType == FoodType.RiceCooked)
                 graphicsSpriteUrl.url = 'Rice.png';
             else
                 graphicsSpriteUrl.url = 'Food.png';
@@ -64,8 +70,15 @@ export class GraphicsFoodAttachmentSystem implements IUpdatable {
             let foodSprite = this.app.db.First(GraphicsSprite, x => x.userId == idFood);
             let attachedSprite = this.app.db.First(GraphicsSprite, x => x.userId == attachment.idAttached);
 
-            foodSprite.x = attachedSprite.x;
-            foodSprite.y = attachedSprite.y;
+            // TODO : delete attachment instead of 
+            if (attachedSprite != null) {
+                foodSprite.x = attachedSprite.x;
+                foodSprite.y = attachedSprite.y;
+            }
+            else {
+                foodSprite.x = 10000000;
+                foodSprite.y = 10000000;
+            }
 
             this.app.db.Update(foodSprite);
         }

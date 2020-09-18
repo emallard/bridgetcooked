@@ -4,7 +4,7 @@ import { Tob } from "../Blocks/Tob";
 import { Food } from "../Blocks/Food";
 import { FoodAttachment } from "../Blocks/FoodAttachment";
 import { PlayerAction } from "../Blocks/PlayerAction";
-import { TobActionCut } from "../Blocks/TobActionCut";
+import { TobAction } from "../Blocks/TobAction";
 import { FoodType } from "../Blocks/FoodType";
 import { Knife } from "../Blocks/Knife";
 import { TobHighlighted } from "../Blocks/TobHighlighted";
@@ -18,15 +18,14 @@ export class KnifeSystem implements IUpdatable {
         this.app = app;
         app.AddUpdatable(this);
 
-        this.app.db.OnInserted(Tob, () => {
-            let tobActionCut = new TobActionCut();
-            app.db.Insert(tobActionCut);
-        });
 
+        this.app.db.OnUpdated(TobAction, action => {
 
-        this.app.db.OnUpdated(TobActionCut, action => {
+            if (action.targetId == null)
+                return;
 
-            if (action.idKnife == null)
+            let knife = this.app.db.First(Knife, x => x.id == action.targetId);
+            if (knife == null)
                 return;
 
             let toby = this.app.db.First(Tob);
@@ -34,13 +33,13 @@ export class KnifeSystem implements IUpdatable {
             // toby to knife board
             let tobyFoodAttachment = app.db.First(FoodAttachment, x => x.idAttached == toby.id);
             if (tobyFoodAttachment != null) {
-                tobyFoodAttachment.idAttached = action.idKnife;
+                tobyFoodAttachment.idAttached = knife.id;
                 app.db.Update(tobyFoodAttachment);
                 return;
             }
 
             // cut if attached and not cut
-            let knifeAttachment = app.db.First(FoodAttachment, x => x.idAttached == action.idKnife);
+            let knifeAttachment = app.db.First(FoodAttachment, x => x.idAttached == knife.id);
             if (knifeAttachment != null) {
                 let food = this.app.db.GetById(Food, knifeAttachment.idFood);
                 if (food.foodType == FoodType.Kiwi) {
@@ -48,6 +47,14 @@ export class KnifeSystem implements IUpdatable {
                     app.db.Update(food);
                 }
                 else if (food.foodType == FoodType.KiwiCut) {
+                    knifeAttachment.idAttached = toby.id;
+                    app.db.Update(knifeAttachment);
+                }
+                else if (food.foodType == FoodType.Pork) {
+                    food.foodType = FoodType.PorkCut;
+                    app.db.Update(food);
+                }
+                else if (food.foodType == FoodType.PorkCut) {
                     knifeAttachment.idAttached = toby.id;
                     app.db.Update(knifeAttachment);
                 }
@@ -65,20 +72,7 @@ export class KnifeSystem implements IUpdatable {
             */
         });
 
-        this.app.db.OnUpdated(PlayerAction, () => {
-            let tobActionCut = app.db.First(TobActionCut);
-            let tobHighlighted = app.db.First(TobHighlighted);
 
-            if (tobHighlighted != null && tobHighlighted.highlightedId != null) {
-                let knife = app.db.First(Knife, x => x.id == tobHighlighted.highlightedId);
-                if (knife != null) {
-                    console.log('table action !');
-                    tobActionCut.idKnife = knife.id;
-                    this.app.db.Update(tobActionCut);
-                    return;
-                }
-            }
-        })
     }
 
 

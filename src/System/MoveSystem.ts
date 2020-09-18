@@ -11,6 +11,7 @@ import { GraphicsSystem } from "./GraphicsSystem";
 import { PhysicsRect, Physics } from "../Physics";
 import { Table } from "../Blocks/Table";
 import { Knife } from "../Blocks/Knife";
+import { Pan } from "../Blocks/Pan";
 
 
 export class ConstrainedMoveRect extends DbEntity {
@@ -65,7 +66,9 @@ export class MoveSystem implements IUpdatable {
         app.db.OnInserted(Knife, (x) => {
             this.OnInserted(x);
         });
-
+        app.db.OnInserted(Pan, (x) => {
+            this.OnInserted(x);
+        });
 
         app.db.OnUpdated(PlayerMoveControl, (playerMoveControl) => {
             let tobMoveControl = app.db.First(TobMoveControl);

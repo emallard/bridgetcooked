@@ -14,6 +14,7 @@ import { DbEntity } from "../Db/DbEntity";
 import { Table } from "../Blocks/Table";
 import { Supply } from "../Blocks/Supply";
 import { Knife } from "../Blocks/Knife";
+import { Pan } from "../Blocks/Pan";
 
 
 export class GraphicsHighlightSystem implements IUpdatable {
@@ -46,21 +47,26 @@ export class GraphicsHighlightSystem implements IUpdatable {
         app.db.OnUpdated(TobHighlighted, (tobHighlighted: TobHighlighted) => {
             let graphicsSprite = app.db.First(GraphicsSprite, x => x.userId == tobHighlighted.id);
 
-            let highlightedTable = app.db.First(Table, x => x.id == tobHighlighted.highlightedId);
-            let highlightedSupply = app.db.First(Supply, x => x.id == tobHighlighted.highlightedId);
+            let table = app.db.First(Table, x => x.id == tobHighlighted.highlightedId);
+            let supply = app.db.First(Supply, x => x.id == tobHighlighted.highlightedId);
             let knife = app.db.First(Knife, x => x.id == tobHighlighted.highlightedId);
+            let pan = app.db.First(Pan, x => x.id == tobHighlighted.highlightedId);
 
-            if (highlightedTable != null) {
-                graphicsSprite.x = highlightedTable.x;
-                graphicsSprite.y = highlightedTable.y;
+            if (table != null) {
+                graphicsSprite.x = table.x;
+                graphicsSprite.y = table.y;
             }
-            else if (highlightedSupply != null) {
-                graphicsSprite.x = highlightedSupply.x;
-                graphicsSprite.y = highlightedSupply.y;
+            else if (supply != null) {
+                graphicsSprite.x = supply.x;
+                graphicsSprite.y = supply.y;
             }
             else if (knife != null) {
                 graphicsSprite.x = knife.x;
                 graphicsSprite.y = knife.y;
+            }
+            else if (pan != null) {
+                graphicsSprite.x = pan.x;
+                graphicsSprite.y = pan.y;
             }
             else {
                 graphicsSprite.x = 100000;

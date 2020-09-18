@@ -4,32 +4,30 @@ import { expect } from "chai";
 import { Tob } from "../Blocks/Tob";
 import { Food } from "../Blocks/Food";
 import { FoodAttachment } from "../Blocks/FoodAttachment";
-import { PlayerAction } from "../Blocks/PlayerAction";
 import { PlayerActionSystem } from "./PlayerActionSystem";
 import { Root } from "../Blocks/Root";
 import { Knife } from "../Blocks/Knife";
 import { FoodType } from "../Blocks/FoodType";
-import { KnifeSystem } from "./KnifeSystem";
-import { TobHighlighted } from "../Blocks/TobHighlighted";
-import { HighlightSystem } from "./HighlightSystem";
 import { TobAction } from "../Blocks/TobAction";
+import { PanSystem } from "./PanSystem";
+import { Pan } from "../Blocks/Pan";
 
 
-describe('KnifeSystem', function () {
-    it('TobAction moves FoodAttachment from Toby to Knife and then Cut the food and then back to Toby', function () {
+describe('PanSystem', function () {
+    it('TobAction moves FoodAttachment from Toby to Pan then combine Kiwi and Pork and then back to Toby', function () {
         let app = new App().CreateNoDom();
-        new KnifeSystem().Configure(app);
+        new PanSystem().Configure(app);
         new PlayerActionSystem().Configure(app);
         app.db.Insert(new Root());
 
         let toby = new Tob();
         app.db.Insert(toby);
 
-        let knife = new Knife();
-        app.db.Insert(knife);
+        let pan = new Pan();
+        app.db.Insert(pan);
 
         let food = new Food();
-        food.foodType = FoodType.Kiwi;
+        food.foodType = FoodType.KiwiCut;
         app.db.Insert(food);
         let foodAttachment = new FoodAttachment();
         foodAttachment.idFood = food.id;
@@ -37,16 +35,24 @@ describe('KnifeSystem', function () {
         app.db.Insert(foodAttachment);
 
         let tobAction = app.db.First(TobAction);
-
-
-        expect(foodAttachment.idAttached).equals(toby.id);
-
-        tobAction.targetId = knife.id;
+        tobAction.targetId = pan.id;
         app.db.Update(tobAction);
-        expect(foodAttachment.idAttached).equals(knife.id);
+        expect(foodAttachment.idAttached).equals(pan.id);
+
+
+
+        let foodPork = new Food();
+        foodPork.foodType = FoodType.PorkCut;
+        app.db.Insert(foodPork);
+        let foodPorkAttachment = new FoodAttachment();
+        foodPorkAttachment.idFood = foodPork.id;
+        foodPorkAttachment.idAttached = toby.id;
+        app.db.Insert(foodPorkAttachment);
+
 
         app.db.Update(tobAction);
-        expect(food.foodType).equals(FoodType.KiwiCut);
+        expect(food.foodType).equals(FoodType.PorkKiwiCooked);
+        expect(foodPorkAttachment.idAttached).equals(null);
 
         app.db.Update(tobAction);
         expect(foodAttachment.idAttached).equals(toby.id);

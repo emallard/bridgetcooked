@@ -9,6 +9,7 @@ import { Supply } from "../Blocks/Supply";
 import { FoodType } from "../Blocks/FoodType";
 import { Knife } from "../Blocks/Knife";
 import { GraphicsSpriteUrl } from "../Blocks/GraphicsSpriteUrl";
+import { Pan } from "../Blocks/Pan";
 
 interface XY {
     id: string;
@@ -42,13 +43,16 @@ export class GraphicsSystem implements IUpdatable {
 
         });
 
-        app.db.OnInserted(Table, (table: Table) => {
-            this.OnInserted(table, 'WoodBlock.png', 0);
+        app.db.OnInserted(Table, (x: Table) => {
+            this.OnInserted(x, 'WoodBlock.png', 0);
         });
 
-        app.db.OnInserted(Knife, (knife: Knife) => {
-            console.log('graphics cutting board !')
-            this.OnInserted(knife, 'CuttingBlock.png', 0);
+        app.db.OnInserted(Pan, (x: Pan) => {
+            this.OnInserted(x, 'PanBlock.png', 0);
+        });
+
+        app.db.OnInserted(Knife, (x: Knife) => {
+            this.OnInserted(x, 'CuttingBlock.png', 0);
         });
 
         app.db.OnInserted(Tob, (toby: Tob) => {
