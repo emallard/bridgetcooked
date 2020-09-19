@@ -10,6 +10,7 @@ import { FoodType } from "../Blocks/FoodType";
 import { Knife } from "../Blocks/Knife";
 import { GraphicsSpriteUrl } from "../Blocks/GraphicsSpriteUrl";
 import { Pan } from "../Blocks/Pan";
+import { End } from "../Blocks/End";
 
 interface XY {
     id: string;
@@ -53,6 +54,10 @@ export class GraphicsSystem implements IUpdatable {
 
         app.db.OnInserted(Knife, (x: Knife) => {
             this.OnInserted(x, 'CuttingBlock.png', 0);
+        });
+
+        app.db.OnInserted(End, (x: End) => {
+            this.OnInserted(x, 'EndBlock.png', 0);
         });
 
         app.db.OnInserted(Tob, (toby: Tob) => {

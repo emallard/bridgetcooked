@@ -24,6 +24,9 @@ import { HighlightSystem } from './System/HighlightSystem';
 import { GraphicsHighlightSystem } from './System/GraphicsHighlightSystem';
 import { Pan } from './Blocks/Pan';
 import { PanSystem } from './System/PanSystem';
+import { End } from './Blocks/End';
+import { EndSystem } from './System/EndSystem';
+import { DomMessageSystem } from './System/DomMessageSystem';
 
 function doResize(svg: SVGElement) {
     svg.style.backgroundColor = 'white';
@@ -56,6 +59,7 @@ export async function newApp() {
     new TableSystem().Configure(app);
     new KnifeSystem().Configure(app);
     new PanSystem().Configure(app);
+    new EndSystem().Configure(app);
     new GraphicsHighlightSystem().Configure(app);
     new GraphicsFoodAttachmentSystem().Configure(app);
     new SvgRootSystem().Configure(app);
@@ -63,6 +67,7 @@ export async function newApp() {
     new SvgPlayerActionControlSystem().Configure(app);
     new ThreeSystem().Configure(app);
     new ThreeGraphicsSpriteSystem().Configure(app);
+    new DomMessageSystem().Configure(app);
 
     app.db.Insert(new Root());
 
@@ -79,35 +84,32 @@ export async function newApp() {
         app.db.Insert(supply);
     }
 
+    function Create<T>(ctor: new () => T, x: number, y: number): T {
+
+        let t = new ctor();
+        let tany = <any>t;
+        tany.x = x * GraphicsSystem.SpriteWidth();
+        tany.y = y * GraphicsSystem.SpriteHeight();
+        app.db.Insert(tany);
+        return t;
+    }
+
     function Test1() {
 
-        CreateSupply(0, 2, FoodType.Kiwi);
-        CreateSupply(-2, 2, FoodType.Pork);
-        CreateSupply(-4, 2, FoodType.Plate);
-        CreateSupply(-6, 2, FoodType.Rice);
+        //CreateSupply(4, 0, FoodType.PlateEnd);
+
+        CreateSupply(0, -2, FoodType.Kiwi);
+        CreateSupply(-2, -2, FoodType.Pork);
+        CreateSupply(-4, -2, FoodType.Plate);
+        CreateSupply(-6, -2, FoodType.Rice);
 
 
-        let knife = new Knife();
-        knife.x = -2 * GraphicsSystem.SpriteWidth();
-        knife.y = 4 * GraphicsSystem.SpriteHeight();
-        app.db.Insert(knife);
+        Create(Knife, -6, 2);
+        Create(Table, -4, 2);
+        Create(Table, -2, 2);
+        Create(Pan, 0, 2);
 
-        let table: Table;
-        table = new Table();
-        table.x = 0 * GraphicsSystem.SpriteWidth();
-        table.y = 4 * GraphicsSystem.SpriteHeight();
-        app.db.Insert(table);
-
-        table = new Table();
-        table.x = 1 * GraphicsSystem.SpriteWidth();
-        table.y = 5 * GraphicsSystem.SpriteHeight();
-        app.db.Insert(table);
-
-
-        table = new Pan();
-        table.x = 2 * GraphicsSystem.SpriteWidth();
-        table.y = 2 * GraphicsSystem.SpriteHeight();
-        app.db.Insert(table);
+        Create(End, 2, 0);
 
         for (let ix = -10; ix < 10; ++ix) {
             for (let iy = -10; iy < 10; ++iy) {
@@ -134,6 +136,11 @@ export async function newApp() {
 
                 for (let pan of app.db.GetAll(Pan)) {
                     if (x == pan.x && y == pan.y)
+                        doInsert = false;
+                }
+
+                for (let end of app.db.GetAll(End)) {
+                    if (x == end.x && y == end.y)
                         doInsert = false;
                 }
 
@@ -164,6 +171,11 @@ export async function newApp() {
                         shadow = true;
                 }
 
+                for (let end of app.db.GetAll(End)) {
+                    if (x == end.x && y == end.y - GraphicsSystem.SpriteHeight())
+                        shadow = true;
+                }
+
                 if (shadow == true)
                     floor.url = 'StoneBlockShadow.png';
                 else
@@ -180,11 +192,16 @@ export async function newApp() {
     Test1();
 
     var clock = new THREE.Clock();
+    var accumDelta = 0;
     function update() {
         requestAnimationFrame(update);
 
         let delta = clock.getDelta();
-        app.Update(delta);
+        accumDelta += delta;
+        if (accumDelta > 0.02) {
+            app.Update(accumDelta);
+            accumDelta = 0;
+        }
     }
 
     requestAnimationFrame(update);

@@ -15,6 +15,7 @@ import { Table } from "../Blocks/Table";
 import { Supply } from "../Blocks/Supply";
 import { Knife } from "../Blocks/Knife";
 import { Pan } from "../Blocks/Pan";
+import { End } from "../Blocks/End";
 
 
 export class GraphicsHighlightSystem implements IUpdatable {
@@ -51,6 +52,7 @@ export class GraphicsHighlightSystem implements IUpdatable {
             let supply = app.db.First(Supply, x => x.id == tobHighlighted.highlightedId);
             let knife = app.db.First(Knife, x => x.id == tobHighlighted.highlightedId);
             let pan = app.db.First(Pan, x => x.id == tobHighlighted.highlightedId);
+            let end = app.db.First(End, x => x.id == tobHighlighted.highlightedId);
 
             if (table != null) {
                 graphicsSprite.x = table.x;
@@ -67,6 +69,10 @@ export class GraphicsHighlightSystem implements IUpdatable {
             else if (pan != null) {
                 graphicsSprite.x = pan.x;
                 graphicsSprite.y = pan.y;
+            }
+            else if (end != null) {
+                graphicsSprite.x = end.x;
+                graphicsSprite.y = end.y;
             }
             else {
                 graphicsSprite.x = 100000;

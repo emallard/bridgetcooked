@@ -6,3 +6,5 @@ export class End extends DbEntity {
     x: number;
     y: number;
 }
+
+

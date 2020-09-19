@@ -10,6 +10,7 @@ import { Knife } from "../Blocks/Knife";
 import { TobHighlighted } from "../Blocks/TobHighlighted";
 import { Pan } from "../Blocks/Pan";
 import { End } from "../Blocks/End";
+import { MessageEnd } from "../Blocks/MessageEnd";
 
 
 export class EndSystem implements IUpdatable {
@@ -39,9 +40,12 @@ export class EndSystem implements IUpdatable {
             if (tobyFoodAttachment != null) {
                 let tobyFood = this.app.db.GetById(Food, tobyFoodAttachment.idFood);
                 if (tobyFood.foodType == FoodType.PlateEnd) {
-                    alert('WELL DONE !');
+
                     tobyFoodAttachment.idAttached = null;
                     app.db.Update(tobyFoodAttachment);
+
+                    let message = new MessageEnd();
+                    app.db.Insert(message);
                 }
             }
         });

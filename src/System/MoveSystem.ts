@@ -12,6 +12,7 @@ import { PhysicsRect, Physics } from "../Physics";
 import { Table } from "../Blocks/Table";
 import { Knife } from "../Blocks/Knife";
 import { Pan } from "../Blocks/Pan";
+import { End } from "../Blocks/End";
 
 
 export class ConstrainedMoveRect extends DbEntity {
@@ -67,6 +68,9 @@ export class MoveSystem implements IUpdatable {
             this.OnInserted(x);
         });
         app.db.OnInserted(Pan, (x) => {
+            this.OnInserted(x);
+        });
+        app.db.OnInserted(End, (x) => {
             this.OnInserted(x);
         });
 

@@ -10,6 +10,7 @@ import { TobHighlighted } from "../Blocks/TobHighlighted";
 import { Supply } from "../Blocks/Supply";
 import { Knife } from "../Blocks/Knife";
 import { Pan } from "../Blocks/Pan";
+import { End } from "../Blocks/End";
 
 interface XY {
     id: string;
@@ -39,6 +40,9 @@ export class HighlightSystem implements IUpdatable {
             this.OnInserted(x);
         });
         app.db.OnInserted(Pan, (x) => {
+            this.OnInserted(x);
+        });
+        app.db.OnInserted(End, (x) => {
             this.OnInserted(x);
         });
 
