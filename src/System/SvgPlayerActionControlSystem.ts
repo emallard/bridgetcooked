@@ -63,9 +63,19 @@ export class SvgPlayerActionControlSystem implements IUpdatable {
             svgControl.circle.setAttribute("fill", "transparent");
         });
 
+        window.addEventListener('resize', () => {
+            this.DoResize(svgControl);
+        });
+
         return svgControl;
     }
 
+    DoResize(svgControl: SvgPlayerActionControl) {
+        svgControl.cx = window.innerWidth - 100;
+        svgControl.cy = 200;
+        svgControl.circle.setAttribute("cx", '' + svgControl.cx);
+        svgControl.circle.setAttribute("cy", '' + svgControl.cy);
+    }
 
     Update(dt: number) {
     }
