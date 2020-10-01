@@ -22,7 +22,7 @@ export class DomMessageSystem implements IUpdatable {
             $('#endModal').modal();
 
             let message = 'Well done !!! <br/><br/> Your time is : <b>' + app.timerSystem.TotalTimeString() + ' ! </b>';
-            if (app.timerSystem.totalTime > 5)
+            if (app.timerSystem.totalTime > 120)
                 message += "<br> <br> You're good at cooking, but .... <br/> The service was a little too slow, the client is exigent. <br /> Another try ?";
             else
                 message += "<br> <br> How can you cook so well and so fast !!! Have you ever had a Michelin star ? ";

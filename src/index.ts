@@ -149,9 +149,12 @@ export function newApp(): App {
                         shadow = true;
                 }
 
+                let ispan = false;
                 for (let pan of app.db.GetAll(Pan)) {
-                    if (x == pan.x && y == pan.y - GraphicsSystem.SpriteHeight())
+                    if (x == pan.x && y == pan.y - GraphicsSystem.SpriteHeight()) {
                         shadow = true;
+                        ispan = true;
+                    }
                 }
 
                 for (let end of app.db.GetAll(End)) {
@@ -159,8 +162,12 @@ export function newApp(): App {
                         shadow = true;
                 }
 
-                if (shadow == true)
-                    floor.url = 'StoneBlockShadow.png';
+                if (shadow == true) {
+                    if (ispan)
+                        floor.url = 'PanBlockShadow.png';
+                    else
+                        floor.url = 'StoneBlockShadow.png';
+                }
                 else
                     floor.url = 'StoneBlock.png';
                 floor.x = x;
