@@ -44,6 +44,8 @@ export class EndSystem implements IUpdatable {
 
                     tobyFoodAttachment.idAttached = null;
                     app.db.Update(tobyFoodAttachment);
+
+                    showMessage = true;
                 }
             }
 

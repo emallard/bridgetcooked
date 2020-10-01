@@ -21,11 +21,12 @@ export class DomMessageSystem implements IUpdatable {
             //alert('Well done !');
             $('#endModal').modal();
 
-            let message = 'Well done !!! <br/><br/> Your time is : <b>' + app.timerSystem.TotalTimeString() + ' ! </b>';
+            let message = '<img src="TobyDown.png" style="float: left; margin-right:20px;">';
+            message += 'Well done !!! <br/><br/> Your time is : <b>' + app.timerSystem.TotalTimeString() + ' ! </b>';
             if (app.timerSystem.totalTime > 120)
-                message += "<br> <br> You're good at cooking, but .... <br/> The service was a little too slow, the client is exigent. <br /> Another try ?";
+                message += "<br><br><br> You're good at cooking, but .... <br/> The service was a little too slow, the client is exigent. <br /> Another try ?";
             else
-                message += "<br> <br> How can you cook so well and so fast !!! Have you ever had a Michelin star ? ";
+                message += "<br><br><br> How can you cook so well and so fast !!! Have you ever had a Michelin star ? ";
             document.getElementById('endModalText').innerHTML = message;
         });
     }
