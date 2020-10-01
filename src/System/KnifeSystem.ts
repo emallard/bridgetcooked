@@ -33,6 +33,11 @@ export class KnifeSystem implements IUpdatable {
             // toby to knife board
             let tobyFoodAttachment = app.db.First(FoodAttachment, x => x.idAttached == toby.id);
             if (tobyFoodAttachment != null) {
+                let food = this.app.db.GetById(Food, tobyFoodAttachment.idFood);
+                if (food.foodType != FoodType.Kiwi
+                    && food.foodType != FoodType.Pork)
+                    return;
+
                 tobyFoodAttachment.idAttached = knife.id;
                 app.db.Update(tobyFoodAttachment);
                 return;

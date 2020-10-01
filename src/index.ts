@@ -42,32 +42,15 @@ function doResize(svg: SVGElement) {
 }
 
 
-export async function newApp() {
+export function newApp(): App {
 
     console.log('happy birthday bridget');
 
     let app = new App();
-    app.CreateNoDom();
+    app.CreateDom();
     //app.db.logLevel = 2;
 
 
-    new GraphicsSystem().Configure(app);
-    new MoveSystem().Configure(app);
-    new HighlightSystem().Configure(app);
-    new PlayerActionSystem().Configure(app);
-    new SupplySystem().Configure(app);
-    new TableSystem().Configure(app);
-    new KnifeSystem().Configure(app);
-    new PanSystem().Configure(app);
-    new EndSystem().Configure(app);
-    new GraphicsHighlightSystem().Configure(app);
-    new GraphicsFoodAttachmentSystem().Configure(app);
-    new SvgRootSystem().Configure(app);
-    new SvgPlayerMoveControlSystem().Configure(app);
-    new SvgPlayerActionControlSystem().Configure(app);
-    new ThreeSystem().Configure(app);
-    new ThreeGraphicsSpriteSystem().Configure(app);
-    new DomMessageSystem().Configure(app);
 
     app.db.Insert(new Root());
 
@@ -205,6 +188,8 @@ export async function newApp() {
     }
 
     requestAnimationFrame(update);
+
+    return app;
 }
 
 
