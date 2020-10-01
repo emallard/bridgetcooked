@@ -27,8 +27,8 @@ export class EndSystem implements IUpdatable {
             if (action.targetId == null)
                 return;
 
-            let end = this.app.db.First(End, x => x.id == action.targetId);
-            if (end == null)
+            let foundEnd = this.app.db.First(End, x => x.id == action.targetId);
+            if (foundEnd == null)
                 return;
 
             let toby = this.app.db.First(Tob);
@@ -37,16 +37,19 @@ export class EndSystem implements IUpdatable {
             let tobyFoodAttachment = app.db.First(FoodAttachment, x => x.idAttached == toby.id);
 
             // toby has food
+            let showMessage = false;
             if (tobyFoodAttachment != null) {
                 let tobyFood = this.app.db.GetById(Food, tobyFoodAttachment.idFood);
                 if (tobyFood.foodType == FoodType.PlateEnd) {
 
                     tobyFoodAttachment.idAttached = null;
                     app.db.Update(tobyFoodAttachment);
-
-                    let message = new MessageEnd();
-                    app.db.Insert(message);
                 }
+            }
+
+            if (showMessage) {
+                let message = new MessageEnd();
+                app.db.Insert(message);
             }
         });
     }

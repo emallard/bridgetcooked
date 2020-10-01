@@ -13,18 +13,22 @@ export class TimerSystem implements IUpdatable {
         return this;
     }
 
-    Update(dt: number) {
-        if (this.started)
-            this.totalTime += dt;
-
+    TotalTimeString(): string {
         let min = '' + Math.floor(this.totalTime / 60);
         let s = '' + Math.floor(this.totalTime % 60);
         if (min.length == 1) min = '0' + min;
         if (s.length == 1) s = '0' + s;
+        return min + ' : ' + s;
+    }
+    Update(dt: number) {
+        if (this.started)
+            this.totalTime += dt;
+
+
 
         let timerText = document.getElementById('timerText');
         if (timerText != null)
-            timerText.innerText = min + ' : ' + s;
+            timerText.innerText = this.TotalTimeString();
 
     }
 

@@ -29,6 +29,10 @@ export class SupplySystem implements IUpdatable {
                 return;
 
             let toby = this.app.db.First(Tob);
+            let tobyFoodAttachment = app.db.First(FoodAttachment, x => x.idAttached == toby.id);
+
+            if (tobyFoodAttachment != null)
+                return;
 
             let food = new Food();
             food.foodType = supply.foodType;

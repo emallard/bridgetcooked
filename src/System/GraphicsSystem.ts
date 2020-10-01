@@ -61,7 +61,7 @@ export class GraphicsSystem implements IUpdatable {
         });
 
         app.db.OnInserted(Tob, (toby: Tob) => {
-            this.OnInserted(toby, 'CharacterCatGirlDown.png', 1);
+            this.OnInserted(toby, 'TobyDown.png', 1);
         });
 
         app.db.OnUpdated(Tob, (toby: Tob) => {
