@@ -4,26 +4,85 @@
 <head>
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
+    <link rel="stylesheet" type="text/css" href="terminal.css" />
+    <style>
+        button {
+            margin-top: 20px;
+            letter-spacing: 0.1em;
+            font-size: 14px;
+            font-weight: 400;
+            line-height: 45px;
+            text-decoration: none;
+            text-transform: uppercase;
+            background: transparent;
+            border: solid 2px white;
+            color: navajowhite;
+        }
+    </style>
 </head>
 
 <body>
 
-    <a href='dist/game.html'>PLAY !</a>
-<br/>
-<br/>    
-- Faire revenir le filet de tous côtés à l'huile d'olive de façon à ce qu'il soit bien doré. Salez, poivrez. Ajoutez 2 kiwis épluchés et coupés en cubes, l'échalote émincée. Faire revenir le tout 5 minutes. Ajoutez alors le vin blanc et le bouillon. Amenez à ébullition. Couvrez, baissez le feu, et laissez mijoter 30mn. Quelques minutes avant de servir, retirez la viande, et maintenez là au chaud.
-<br/>
-<br/>
-- Ajoutez dans la cocotte la crème fraîche. Faire bouillir quelques minutes pour qu'elle réduise légèrement. Mixer cette sauce, soit au mixeur plongeant,
-<br/>
-<br/>
-Mettre le bouillon à chauffer et le maintenir à petit bouillon. Dans une casserole faire revenir l'oignon dans un peu d'huile, puis rajouter le riz et remuer bien jusqu'à ce qu'il devienne transparent puis ajouter le vin blanc et le laisser évaporer. Ajouter une louche de bouillon, remuer jusqu'à absorption du liquide, rajouter une louche et comme ça pendant 18mn minutes. Le riz sera alors cuit mais crémeux et ferme à la fois. Mettre le beurre froid, remuer puis le mascarpone et le parmesan. Couvrir et laisser reposer 2 minutes.
-<br/>
-<br/>
-Découpez les filets mignons en tranches épaisses. Disposer les tranches sur sur une assiette. Napper d' un peu de sauce. Décorez avec des tranches de kiwis et quelques brins de thym. Ajouter le risotto.
-<br/>
-<br/>
-    
+    <pre id="pre1"><output class="typed1"></output></pre>
+    <pre id="pre2" style="display:none"><output class="typed2"></output></pre>
+
+
+    <script src="typed.js"></script>
+
+    <button id='instructions' style="display:none" onclick="instructions_click()">Instructions</button>
+
+    <button id='play' style="display:none" onclick="document.location.href = 'dist/game.html'">PLAY !</button>
+
+    <script>
+        var strings1 = [
+            'Bon anniversaire Bridget !',
+            '  ',
+            'I think you are here because you have received your recipe book.',
+            'Here is a challenge for you',
+            'Please use your phone on landscape mode and press the Instruction button !']
+
+        var options1 = {
+            strings: [
+                strings1.join('\n')
+                //'test'
+            ],
+
+            typeSpeed: 50,
+            onComplete: () => {
+                document.getElementById('instructions').style.display = 'block';
+            }
+        };
+
+        var typed = new Typed('.typed1', options1);
+
+        function instructions_click() {
+            console.log('instructions_click');
+            document.getElementById('instructions').style.display = 'none';
+            document.getElementById('pre1').style.display = 'none';
+            document.getElementById('pre2').style.display = 'block';
+
+            var options2 = {
+                strings: [
+                    ['You will have to cook a Filet Mignon De Porc Aux Kiwis',
+                        '- take an onion and cut it',
+                        '- take a piece of pork and cut it',
+                        '- cook them in a pan',
+                        '- take some rice and cook it in a pan',
+                        '- put everything on a plate',
+                        '- serve the plate to the dedicated table !',
+                        '',
+                        'Press the play button '].join('\n')
+                ],
+                typeSpeed: 50,
+                onComplete: () => {
+                    document.getElementById('play').style.display = 'block';
+                }
+            };
+            var typed = new Typed('.typed2', options2);
+        }
+
+    </script>
+
 </body>
 
 </html>
