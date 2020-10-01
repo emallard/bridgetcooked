@@ -114,12 +114,12 @@
 
     $('#exampleModalLong').modal();
     document.getElementById('btnStart').addEventListener('click', () => {
-        //document.body.requestFullscreen();
+        if (document.location.host != 'localhost')
+            document.body.requestFullscreen();
         app.Start();
     });
 
     document.getElementById('btnRestart').addEventListener('click', () => {
-        //document.body.requestFullscreen();
         document.location.href = document.location.href;
     });
 
