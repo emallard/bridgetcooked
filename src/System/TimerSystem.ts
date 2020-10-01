@@ -1,6 +1,7 @@
 import { IUpdatable } from "../IUpdatable";
 import { App } from "../App";
 import { DbTypedGroup } from "../Db/DbGroup";
+import { MessageEnd } from "../Blocks/MessageEnd";
 
 export class TimerSystem implements IUpdatable {
     app: App;
@@ -24,11 +25,16 @@ export class TimerSystem implements IUpdatable {
         if (this.started)
             this.totalTime += dt;
 
-
-
         let timerText = document.getElementById('timerText');
         if (timerText != null)
             timerText.innerText = this.TotalTimeString();
+
+        if (this.totalTime > 120) {
+            let message = new MessageEnd();
+            message.win = false;
+            this.app.db.Insert(message);
+            this.Stop();
+        }
 
     }
 

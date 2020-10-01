@@ -51,7 +51,10 @@ export class EndSystem implements IUpdatable {
 
             if (showMessage) {
                 let message = new MessageEnd();
+                message.win = true;
                 app.db.Insert(message);
+                if (this.app.timerSystem != null)
+                    this.app.timerSystem.Stop();
             }
         });
     }

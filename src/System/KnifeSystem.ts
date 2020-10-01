@@ -32,6 +32,8 @@ export class KnifeSystem implements IUpdatable {
 
             // toby to knife board
             let tobyFoodAttachment = app.db.First(FoodAttachment, x => x.idAttached == toby.id);
+            let knifeAttachment = app.db.First(FoodAttachment, x => x.idAttached == knife.id);
+
             if (tobyFoodAttachment != null) {
                 let food = this.app.db.GetById(Food, tobyFoodAttachment.idFood);
                 if (food.foodType != FoodType.Kiwi
@@ -44,7 +46,7 @@ export class KnifeSystem implements IUpdatable {
             }
 
             // cut if attached and not cut
-            let knifeAttachment = app.db.First(FoodAttachment, x => x.idAttached == knife.id);
+
             if (knifeAttachment != null) {
                 let food = this.app.db.GetById(Food, knifeAttachment.idFood);
                 if (food.foodType == FoodType.Kiwi) {
