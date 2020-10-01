@@ -90,6 +90,9 @@ export function newApp(): App {
         Create(Knife, -6, 2);
         Create(Table, -4, 2);
         Create(Table, -2, 2);
+        Create(Table, -8, 2);
+        Create(Table, -8, 0);
+        Create(Table, -8, -2);
         Create(Pan, 0, 2);
 
         Create(End, 2, 0);

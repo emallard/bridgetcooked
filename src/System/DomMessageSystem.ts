@@ -25,7 +25,7 @@ export class DomMessageSystem implements IUpdatable {
                 let message = '<img src="TobyDown.png" style="float: left; margin-right:20px;">';
                 message += 'Well done !!! <br/><br/> Your time is : <b>' + app.timerSystem.TotalTimeString() + ' ! </b>';
                 if (app.timerSystem.totalTime > 90)
-                    message += "<br><br><br> You're good at cooking, but .... <br/> <br /> Another try ?";
+                    message += "<br><br><br> You're good and fast at cooking, but .... you can do better ;) <br/> <br /> Another try ?";
                 else
                     message += "<br><br><br> How can you cook so well and so fast !!! Have you ever had a Michelin star ? ";
                 document.getElementById('endModalText').innerHTML = message;

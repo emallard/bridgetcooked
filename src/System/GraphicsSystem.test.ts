@@ -55,7 +55,7 @@ describe('GraphicsSystem', function () {
         let spriteUrl = app.db.First(GraphicsSpriteUrl);
         expect(spriteUrl.idGraphicsSprite).equal(s.id);
         expect(spriteUrl.userId).equal(toby.id);
-        expect(spriteUrl.url).equal('CharacterCatGirlDown.png');
+        expect(spriteUrl.url).equal('TobyDown.png');
 
 
         toby.x = 5;

@@ -62,11 +62,23 @@ export class ThreeGraphicsSpriteSystem implements IUpdatable {
         app.db.OnUpdated(GraphicsSpriteUrl, spriteUrl => {
             let threeGraphicsSprite = app.db.First(ThreeGraphicsSprite, x => x.graphicsSpriteId == spriteUrl.idGraphicsSprite);
             if (spriteUrl.url != undefined) {
-                threeGraphicsSprite.material.map = this.loader.load(spriteUrl.url);
+                threeGraphicsSprite.material.map = this.LoadTexture(spriteUrl.url);
                 threeGraphicsSprite.material.needsUpdate = true;
             }
 
         });
+    }
+
+    mapTextures = new Map<string, THREE.Texture>();
+    LoadTexture(url: string): THREE.Texture {
+        if (this.mapTextures.has(url))
+            return this.mapTextures.get(url);
+        else {
+            console.log('load texture ' + url);
+            let texture = this.loader.load(url);
+            this.mapTextures.set(url, texture);
+            return texture;
+        }
     }
 
     Update(dt: number) {
